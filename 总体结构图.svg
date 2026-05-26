@@ -1,0 +1,404 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" style="background:#0d1117;font-family:Arial,sans-serif">
+  <defs>
+    <linearGradient id="towerGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3a4454"/><stop offset="50%" stop-color="#586478"/><stop offset="100%" stop-color="#3a4454"/>
+    </linearGradient>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1520"/><stop offset="100%" stop-color="#1a2535"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="1000" fill="url(#skyGrad)"/>
+  <line x1="0" y1="870" x2="1400" y2="870" stroke="#30363d" stroke-width="2"/>
+  <rect x="0" y="870" width="1400" height="130" fill="#0d1117"/>
+
+  <!-- Title -->
+  <text x="700" y="32" text-anchor="middle" fill="#e6edf3" font-size="20" font-weight="bold">天袭中队 — 总体结构图</text>
+  <text x="700" y="52" text-anchor="middle" fill="#8b949e" font-size="12">中南大学 | 赛题一「青年刺激」 | 塔高50m · 同心双环 φ12m/φ16m · 载客40人/次</text>
+
+  <!-- ================================================================ -->
+  <!--  LEFT: MAIN ELEVATION (NORTH FACE) -->
+  <!-- ================================================================ -->
+  <g transform="translate(60,70)">
+    <text x="180" y="0" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="bold">正视图 (北面)</text>
+
+    <!-- ===== FOUNDATION ===== -->
+    <rect x="75" y="770" width="210" height="28" fill="#1c2333" stroke="#30363d" stroke-width="2" rx="3"/>
+    <text x="180" y="812" text-anchor="middle" fill="#8b949e" font-size="10">C30钢筋混凝土基础 深~8m</text>
+
+    <!-- ===== TOWER BODY (FRONT FACE ONLY) ===== -->
+    <!-- Two front columns of the tower -->
+    <rect x="145" y="60" width="10" height="710" fill="#586478" stroke="#8b9bb5" stroke-width="1"/>
+    <rect x="205" y="60" width="10" height="710" fill="#586478" stroke="#8b9bb5" stroke-width="1"/>
+
+    <!-- Horizontal cross braces -->
+    <line x1="155" y1="60" x2="215" y2="60" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="120" x2="215" y2="120" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="180" x2="215" y2="180" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="240" x2="215" y2="240" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="300" x2="215" y2="300" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="360" x2="215" y2="360" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="420" x2="215" y2="420" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="480" x2="215" y2="480" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="540" x2="215" y2="540" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="600" x2="215" y2="600" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="660" x2="215" y2="660" stroke="#6e7d95" stroke-width="2"/>
+    <line x1="155" y1="720" x2="215" y2="720" stroke="#6e7d95" stroke-width="2"/>
+
+    <!-- Diagonal cross braces -->
+    <line x1="155" y1="60"  x2="215" y2="120" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="215" y1="120" x2="155" y2="180" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="155" y1="180" x2="215" y2="240" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="215" y1="240" x2="155" y2="300" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="155" y1="300" x2="215" y2="360" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="215" y1="360" x2="155" y2="420" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="155" y1="420" x2="215" y2="480" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="215" y1="480" x2="155" y2="540" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="155" y1="540" x2="215" y2="600" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="215" y1="600" x2="155" y2="660" stroke="#4a5568" stroke-width="1.2"/>
+    <line x1="155" y1="660" x2="215" y2="720" stroke="#4a5568" stroke-width="1.2"/>
+
+    <!-- Dimension: brace spacing -->
+    <line x1="222" y1="60"  x2="230" y2="60"  stroke="#d29922" stroke-width="0.6"/>
+    <line x1="222" y1="120" x2="230" y2="120" stroke="#d29922" stroke-width="0.6"/>
+    <text x="235" y="93" fill="#d29922" font-size="9">3m</text>
+
+    <!-- ===== GUIDE RAILS ON FRONT FACE (2 of 8) ===== -->
+    <!-- Outer ring rail (right side of face) -->
+    <line x1="190" y1="55" x2="190" y2="770" stroke="#4da6ff" stroke-width="4" opacity="0.9"/>
+    <!-- Inner ring rail (left side of face) -->
+    <line x1="170" y1="55" x2="170" y2="770" stroke="#ff6b6b" stroke-width="4" opacity="0.9"/>
+
+    <!-- Rail labels -->
+    <text x="170" y="50" text-anchor="middle" fill="#ff6b6b" font-size="8" font-weight="bold">内导轨</text>
+    <text x="190" y="50" text-anchor="middle" fill="#4da6ff" font-size="8" font-weight="bold">外导轨</text>
+
+    <!-- Bracket connections (rail to tower) -->
+    <line x1="165" y1="120" x2="170" y2="120" stroke="#8b949e" stroke-width="1"/>
+    <line x1="165" y1="240" x2="170" y2="240" stroke="#8b949e" stroke-width="1"/>
+    <line x1="165" y1="360" x2="170" y2="360" stroke="#8b949e" stroke-width="1"/>
+    <line x1="205" y1="120" x2="190" y2="120" stroke="#8b949e" stroke-width="0.8"/>
+    <line x1="205" y1="240" x2="190" y2="240" stroke="#8b949e" stroke-width="0.8"/>
+    <line x1="205" y1="360" x2="190" y2="360" stroke="#8b949e" stroke-width="0.8"/>
+
+    <!-- ===== TOP PLATFORM + SHEAVES ===== -->
+    <rect x="130" y="52" width="100" height="10" fill="#4a5568" stroke="#6e7d95" stroke-width="2" rx="2"/>
+    <text x="180" y="48" text-anchor="middle" fill="#d29922" font-size="10">+50.0m 顶部滑轮平台</text>
+
+    <!-- Sheave wheels -->
+    <circle cx="150" cy="52" r="7" fill="none" stroke="#8b949e" stroke-width="2"/>
+    <circle cx="180" cy="52" r="7" fill="none" stroke="#8b949e" stroke-width="2"/>
+    <circle cx="210" cy="52" r="7" fill="none" stroke="#8b949e" stroke-width="2"/>
+
+    <!-- ===== OUTER RING (BLUE) - positioned lower ===== -->
+    <!-- VERTICAL cables from top sheave down to carriage -->
+    <line x1="150" y1="45" x2="150" y2="460" stroke="#4da6ff" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/>
+    <line x1="210" y1="45" x2="210" y2="460" stroke="#4da6ff" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/>
+
+    <!-- Outer ring sliding carriage -->
+    <rect x="120" y="455" width="120" height="26" fill="#1a3050" stroke="#4da6ff" stroke-width="2.5" rx="3"/>
+    <text x="180" y="448" text-anchor="middle" fill="#4da6ff" font-size="9" font-weight="bold">外环滑架</text>
+
+    <!-- Rollers on outer rail -->
+    <circle cx="170" cy="462" r="2.5" fill="#8b949e"/>
+    <circle cx="170" cy="479" r="2.5" fill="#8b949e"/>
+    <circle cx="190" cy="462" r="2.5" fill="#8b949e"/>
+    <circle cx="190" cy="479" r="2.5" fill="#8b949e"/>
+
+    <!-- Slewing bearing -->
+    <rect x="130" y="481" width="100" height="6" fill="#2a4a6a" stroke="#4da6ff" stroke-width="1"/>
+    <text x="180" y="498" text-anchor="middle" fill="#4da6ff" font-size="8">回转支承 φ3.5m</text>
+
+    <!-- Outer ring truss (edge view = sees cross-section) -->
+    <line x1="80" y1="505" x2="280" y2="505" stroke="#4da6ff" stroke-width="6"/>
+    <line x1="80" y1="520" x2="280" y2="520" stroke="#4da6ff" stroke-width="5"/>
+    <!-- Truss struts -->
+    <line x1="100" y1="505" x2="100" y2="520" stroke="#4da6ff" stroke-width="1"/>
+    <line x1="130" y1="505" x2="130" y2="520" stroke="#4da6ff" stroke-width="1"/>
+    <line x1="180" y1="505" x2="180" y2="520" stroke="#4da6ff" stroke-width="1"/>
+    <line x1="230" y1="505" x2="230" y2="520" stroke="#4da6ff" stroke-width="1"/>
+    <line x1="260" y1="505" x2="260" y2="520" stroke="#4da6ff" stroke-width="1"/>
+
+    <text x="80" y="500" fill="#4da6ff" font-size="9" font-weight="bold">外环桁架 φ16m (环形钢管桁架)</text>
+
+    <!-- Cantilever arms (outer ring, pointing inward toward center) -->
+    <line x1="80" y1="512" x2="55" y2="555" stroke="#4da6ff" stroke-width="3"/>
+    <line x1="280" y1="512" x2="305" y2="555" stroke="#4da6ff" stroke-width="3"/>
+
+    <!-- Outer ring capsules (facing inward) -->
+    <rect x="30" y="550" width="50" height="26" fill="#1a3a5c" stroke="#4da6ff" stroke-width="2" rx="4"/>
+    <text x="55" y="556" text-anchor="middle" fill="#4da6ff" font-size="8">🔵 蓝1</text>
+    <text x="55" y="571" text-anchor="middle" fill="#8b949e" font-size="7">朝内→看红</text>
+
+    <rect x="280" y="550" width="50" height="26" fill="#1a3a5c" stroke="#4da6ff" stroke-width="2" rx="4"/>
+    <text x="305" y="556" text-anchor="middle" fill="#4da6ff" font-size="8">🔵 蓝6</text>
+    <text x="305" y="571" text-anchor="middle" fill="#8b949e" font-size="7">朝内→看红</text>
+
+    <!-- ===== INNER RING (RED) - positioned higher ===== -->
+    <!-- VERTICAL cables from top sheave down to carriage -->
+    <line x1="155" y1="45" x2="155" y2="300" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/>
+    <line x1="205" y1="45" x2="205" y2="300" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/>
+
+    <!-- Inner ring sliding carriage -->
+    <rect x="135" y="295" width="90" height="24" fill="#3a1a1a" stroke="#ff6b6b" stroke-width="2.5" rx="3"/>
+    <text x="180" y="290" text-anchor="middle" fill="#ff6b6b" font-size="9" font-weight="bold">内环滑架</text>
+
+    <!-- Rollers on inner rail -->
+    <circle cx="165" cy="302" r="2" fill="#8b949e"/>
+    <circle cx="165" cy="317" r="2" fill="#8b949e"/>
+
+    <!-- Slewing bearing -->
+    <rect x="141" y="319" width="78" height="5" fill="#5a2a2a" stroke="#ff6b6b" stroke-width="1"/>
+    <text x="180" y="334" text-anchor="middle" fill="#ff6b6b" font-size="8">回转支承 φ3.0m</text>
+
+    <!-- Inner ring truss (narrower) -->
+    <line x1="100" y1="342" x2="260" y2="342" stroke="#ff6b6b" stroke-width="5"/>
+    <line x1="100" y1="355" x2="260" y2="355" stroke="#ff6b6b" stroke-width="4"/>
+    <line x1="140" y1="342" x2="140" y2="355" stroke="#ff6b6b" stroke-width="1"/>
+    <line x1="180" y1="342" x2="180" y2="355" stroke="#ff6b6b" stroke-width="1"/>
+    <line x1="220" y1="342" x2="220" y2="355" stroke="#ff6b6b" stroke-width="1"/>
+
+    <text x="100" y="338" fill="#ff6b6b" font-size="9" font-weight="bold">内环桁架 φ12m</text>
+
+    <!-- Cantilever arms (inner ring, pointing outward) -->
+    <line x1="100" y1="348" x2="80" y2="388" stroke="#ff6b6b" stroke-width="3"/>
+    <line x1="260" y1="348" x2="280" y2="388" stroke="#ff6b6b" stroke-width="3"/>
+
+    <!-- Inner ring capsules (facing outward) -->
+    <rect x="55" y="383" width="50" height="26" fill="#4a1515" stroke="#ff6b6b" stroke-width="2" rx="4"/>
+    <text x="80" y="389" text-anchor="middle" fill="#ff6b6b" font-size="8">🔴 红1</text>
+    <text x="80" y="404" text-anchor="middle" fill="#8b949e" font-size="7">朝外→看蓝</text>
+
+    <rect x="255" y="383" width="50" height="26" fill="#4a1515" stroke="#ff6b6b" stroke-width="2" rx="4"/>
+    <text x="280" y="389" text-anchor="middle" fill="#ff6b6b" font-size="8">🔴 红6</text>
+    <text x="280" y="404" text-anchor="middle" fill="#8b949e" font-size="7">朝外→看蓝</text>
+
+    <!-- ===== WIRE ROPE ANNOTATION ===== -->
+    <!-- Show cable path: winch → top sheave → straight down to carriage -->
+    <text x="95" y="270" fill="#d29922" font-size="9">钢缆(垂直)</text>
+    <line x1="100" y1="275" x2="155" y2="275" stroke="#d29922" stroke-width="0.5"/>
+    <text x="95" y="400" fill="#d29922" font-size="9">钢缆(垂直)</text>
+    <line x1="100" y1="405" x2="150" y2="460" stroke="#d29922" stroke-width="0.5"/>
+
+    <!-- ===== WINCHES AT BASE ===== -->
+    <rect x="10" y="720" width="35" height="50" fill="#2a3040" stroke="#586478" stroke-width="2" rx="3"/>
+    <circle cx="27" cy="735" r="10" fill="none" stroke="#8b949e" stroke-width="1.5"/>
+    <text x="27" y="785" text-anchor="middle" fill="#8b949e" font-size="8">卷扬机</text>
+    <text x="27" y="797" text-anchor="middle" fill="#8b949e" font-size="7">×2台</text>
+
+    <!-- Station platform -->
+    <rect x="240" y="740" width="100" height="30" fill="#2a3040" stroke="#586478" stroke-width="1.5" rx="3"/>
+    <text x="290" y="756" text-anchor="middle" fill="#8b949e" font-size="9">站台平台 +2.5m</text>
+
+    <!-- Height markers -->
+    <line x1="225" y1="60" x2="260" y2="60" stroke="#d29922" stroke-width="0.6"/>
+    <text x="263" y="63" fill="#d29922" font-size="9">+50m</text>
+    <line x1="225" y1="770" x2="260" y2="770" stroke="#d29922" stroke-width="0.6"/>
+    <text x="263" y="773" fill="#d29922" font-size="9">±0m</text>
+  </g>
+
+  <!-- ================================================================ -->
+  <!--  RIGHT: CROSS-SECTION SHOWING ALL 8 RAILS + 2 CARRIAGES -->
+  <!-- ================================================================ -->
+  <g transform="translate(440,70)">
+    <text x="240" y="0" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="bold">截面图 A-A (俯视 — 8导轨 + 双滑架)</text>
+    <text x="240" y="15" text-anchor="middle" fill="#8b949e" font-size="10">从塔顶向下看，展示全部8条导轨和两个滑架</text>
+
+    <!-- Outer ring truss (circle) -->
+    <circle cx="240" cy="280" r="200" fill="none" stroke="#4da6ff" stroke-width="2.5" stroke-dasharray="6,3" opacity="0.3"/>
+
+    <!-- Inner ring truss (circle) -->
+    <circle cx="240" cy="280" r="150" fill="none" stroke="#ff6b6b" stroke-width="2.5" stroke-dasharray="6,3" opacity="0.3"/>
+
+    <!-- ===== TOWER: 3m x 3m square ===== -->
+    <rect x="200" y="240" width="80" height="80" fill="#2a3040" stroke="#6e7d95" stroke-width="3"/>
+
+    <!-- 4 main columns -->
+    <circle cx="200" cy="240" r="7" fill="#4a5568" stroke="#aabbcc" stroke-width="2"/>
+    <circle cx="280" cy="240" r="7" fill="#4a5568" stroke="#aabbcc" stroke-width="2"/>
+    <circle cx="200" cy="320" r="7" fill="#4a5568" stroke="#aabbcc" stroke-width="2"/>
+    <circle cx="280" cy="320" r="7" fill="#4a5568" stroke="#aabbcc" stroke-width="2"/>
+    <text x="240" y="284" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="bold">塔柱</text>
+    <text x="240" y="296" text-anchor="middle" fill="#8b949e" font-size="8">□3m×3m</text>
+
+    <!-- ===== 8 GUIDE RAILS ===== -->
+    <!-- Grouped by face: each face has 2 rails (inner + outer) -->
+
+    <!-- NORTH face (top) -->
+    <rect x="224" y="230" width="6" height="20" fill="#ff6b6b" rx="1"/>
+    <rect x="250" y="230" width="6" height="20" fill="#4da6ff" rx="1"/>
+    <text x="227" y="225" fill="#ff6b6b" font-size="7">内轨1</text>
+    <text x="253" y="225" fill="#4da6ff" font-size="7">外轨1</text>
+
+    <!-- SOUTH face (bottom) -->
+    <rect x="224" y="330" width="6" height="20" fill="#ff6b6b" rx="1"/>
+    <rect x="250" y="330" width="6" height="20" fill="#4da6ff" rx="1"/>
+    <text x="227" y="360" fill="#ff6b6b" font-size="7">内轨3</text>
+    <text x="253" y="360" fill="#4da6ff" font-size="7">外轨3</text>
+
+    <!-- EAST face (right) — rails are vertical in plan view -->
+    <rect x="290" y="264" width="20" height="6" fill="#ff6b6b" rx="1"/>
+    <rect x="290" y="290" width="20" height="6" fill="#4da6ff" rx="1"/>
+    <text x="315" y="269" fill="#ff6b6b" font-size="7">内轨2</text>
+    <text x="315" y="295" fill="#4da6ff" font-size="7">外轨2</text>
+
+    <!-- WEST face (left) — rails are vertical in plan view -->
+    <rect x="170" y="264" width="20" height="6" fill="#ff6b6b" rx="1"/>
+    <rect x="170" y="290" width="20" height="6" fill="#4da6ff" rx="1"/>
+    <text x="150" y="269" fill="#ff6b6b" font-size="7" text-anchor="end">内轨4</text>
+    <text x="150" y="295" fill="#4da6ff" font-size="7" text-anchor="end">外轨4</text>
+
+    <!-- ===== OUTER RING CARRIAGE (blue, dashed box) ===== -->
+    <rect x="188" y="230" width="104" height="120" fill="none" stroke="#4da6ff" stroke-width="2.5" stroke-dasharray="6,4" rx="3"/>
+    <text x="240" y="217" text-anchor="middle" fill="#4da6ff" font-size="10" font-weight="bold">外环滑架(蓝)</text>
+
+    <!-- Outer ring rollers on outer rails -->
+    <circle cx="253" cy="240" r="3" fill="#4da6ff"/>
+    <circle cx="253" cy="320" r="3" fill="#4da6ff"/>
+    <circle cx="292" cy="293" r="3" fill="#4da6ff"/>
+    <circle cx="188" cy="293" r="3" fill="#4da6ff"/>
+
+    <!-- ===== INNER RING CARRIAGE (red, dashed box) ===== -->
+    <rect x="196" y="242" width="88" height="96" fill="none" stroke="#ff6b6b" stroke-width="2.5" stroke-dasharray="4,4" rx="3"/>
+    <text x="240" y="238" text-anchor="middle" fill="#ff6b6b" font-size="10" font-weight="bold">内环滑架(红)</text>
+
+    <!-- Inner ring rollers on inner rails -->
+    <circle cx="227" cy="240" r="2.5" fill="#ff6b6b"/>
+    <circle cx="227" cy="320" r="2.5" fill="#ff6b6b"/>
+    <circle cx="280" cy="267" r="2.5" fill="#ff6b6b"/>
+    <circle cx="200" cy="267" r="2.5" fill="#ff6b6b"/>
+
+    <!-- ===== BRACKET DETAIL (NORTH FACE) ===== -->
+    <g transform="translate(300, 400)">
+      <text x="0" y="0" fill="#e6edf3" font-size="10" font-weight="bold">牛腿详图 (北面)</text>
+      <!-- Tower front edge -->
+      <rect x="0" y="10" width="80" height="6" fill="#586478" rx="1"/>
+      <text x="40" y="28" text-anchor="middle" fill="#8b949e" font-size="7">塔柱横杆</text>
+      <!-- Brackets -->
+      <rect x="18" y="6" width="4" height="20" fill="#8b949e" rx="0.5"/>
+      <rect x="58" y="6" width="4" height="20" fill="#8b949e" rx="0.5"/>
+      <!-- Rails on brackets -->
+      <rect x="14" y="26" width="12" height="4" fill="#ff6b6b" rx="1"/>
+      <rect x="54" y="26" width="12" height="4" fill="#4da6ff" rx="1"/>
+      <text x="20" y="38" text-anchor="middle" fill="#ff6b6b" font-size="6">内轨</text>
+      <text x="60" y="38" text-anchor="middle" fill="#4da6ff" font-size="6">外轨</text>
+      <!-- Bolts -->
+      <circle cx="17" cy="30" r="1" fill="#e6edf3"/>
+      <circle cx="23" cy="30" r="1" fill="#e6edf3"/>
+      <circle cx="57" cy="30" r="1" fill="#e6edf3"/>
+      <circle cx="63" cy="30" r="1" fill="#e6edf3"/>
+    </g>
+
+    <!-- Legend -->
+    <g transform="translate(50, 420)">
+      <rect x="0" y="0" width="180" height="70" fill="#161b22" stroke="#30363d" stroke-width="1" rx="4"/>
+      <text x="10" y="18" fill="#e6edf3" font-size="10" font-weight="bold">图例</text>
+      <rect x="10" y="26" width="12" height="4" fill="#ff6b6b" rx="1"/>
+      <text x="28" y="31" fill="#ff6b6b" font-size="9">4条内环导轨 (红队用)</text>
+      <rect x="10" y="38" width="12" height="4" fill="#4da6ff" rx="1"/>
+      <text x="28" y="43" fill="#4da6ff" font-size="9">4条外环导轨 (蓝队用)</text>
+      <line x1="10" y1="54" x2="22" y2="54" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="3,3"/>
+      <text x="28" y="57" fill="#ff6b6b" font-size="9">内环滑架(滚轮卡内轨)</text>
+      <line x1="10" y1="66" x2="22" y2="66" stroke="#4da6ff" stroke-width="2" stroke-dasharray="3,3"/>
+      <text x="28" y="69" fill="#4da6ff" font-size="9">外环滑架(滚轮卡外轨)</text>
+    </g>
+
+    <!-- Count annotation -->
+    <g transform="translate(250, 420)">
+      <rect x="0" y="0" width="220" height="70" fill="#161b22" stroke="#d29922" stroke-width="1" rx="4"/>
+      <text x="10" y="18" fill="#d29922" font-size="10" font-weight="bold">导轨统计</text>
+      <text x="10" y="35" fill="#e6edf3" font-size="9">塔柱4个面 × 每面2条 = 共8条导轨</text>
+      <text x="10" y="50" fill="#8b949e" font-size="9">内导轨×4: 牛腿焊在横杆上, 距主管较近</text>
+      <text x="10" y="62" fill="#8b949e" font-size="9">外导轨×4: 牛腿焊在横杆上, 距主管较远</text>
+    </g>
+  </g>
+
+  <!-- ================================================================ -->
+  <!--  BOTTOM: CABLE PATH DIAGRAM -->
+  <!-- ================================================================ -->
+  <g transform="translate(60, 534)">
+    <text x="200" y="0" text-anchor="middle" fill="#e6edf3" font-size="14" font-weight="bold">钢缆走向示意图 (单环)</text>
+
+    <!-- Simplified tower -->
+    <rect x="180" y="15" width="40" height="300" fill="url(#towerGrad)" stroke="#6e7d95" stroke-width="1.5"/>
+
+    <!-- Top sheave -->
+    <rect x="170" y="10" width="60" height="10" fill="#4a5568" stroke="#6e7d95" stroke-width="1.5"/>
+    <circle cx="195" cy="10" r="6" fill="none" stroke="#8b949e" stroke-width="2"/>
+    <circle cx="205" cy="10" r="6" fill="none" stroke="#8b949e" stroke-width="2"/>
+
+    <!-- Carriage -->
+    <rect x="160" y="200" width="80" height="18" fill="#1a3050" stroke="#4da6ff" stroke-width="2" rx="2"/>
+
+    <!-- Cable path: winch at base → up along tower → over sheave → down to carriage -->
+    <!-- Segment 1: winch to sheave (up the side) -->
+    <line x1="60" y1="280" x2="60" y2="10" stroke="#4da6ff" stroke-width="2.5"/>
+    <!-- Segment 2: over sheave (horizontal) -->
+    <line x1="60" y1="10" x2="195" y2="10" stroke="#4da6ff" stroke-width="2.5"/>
+    <!-- Segment 3: sheave to carriage (straight down) -->
+    <line x1="195" y1="16" x2="195" y2="200" stroke="#4da6ff" stroke-width="3" stroke-dasharray="10,4"/>
+
+    <!-- Arrows showing direction -->
+    <polygon points="195,180 192,188 198,188" fill="#4da6ff"/>
+    <polygon points="55,270 48,267 48,273" fill="#4da6ff"/>
+
+    <!-- Winch -->
+    <rect x="40" y="275" width="40" height="30" fill="#2a3040" stroke="#586478" stroke-width="2" rx="3"/>
+    <circle cx="60" cy="290" r="12" fill="none" stroke="#8b949e" stroke-width="2"/>
+    <text x="60" y="318" text-anchor="middle" fill="#8b949e" font-size="8">卷扬机</text>
+
+    <!-- Annotations -->
+    <text x="97" y="85" fill="#d29922" font-size="9">钢缆沿塔柱</text>
+    <line x1="100" y1="95" x2="80" y2="120" stroke="#d29922" stroke-width="0.5"/>
+    <text x="97" y="80" fill="#d29922" font-size="9">侧面上升</text>
+
+    <text x="215" y="110" fill="#d29922" font-size="9">垂直下放</text>
+    <line x1="215" y1="115" x2="198" y2="140" stroke="#d29922" stroke-width="0.5"/>
+    <text x="215" y="105" fill="#d29922" font-size="9">连接滑架</text>
+
+    <text x="165" y="235" fill="#8b949e" font-size="9">滑架沿导轨</text>
+    <text x="165" y="247" fill="#8b949e" font-size="9">上下滑动</text>
+
+    <!-- Counterweight -->
+    <rect x="240" y="200" width="25" height="60" fill="#2a3040" stroke="#8b949e" stroke-width="1.5" rx="2"/>
+    <text x="252" y="230" text-anchor="middle" fill="#8b949e" font-size="7">配重</text>
+    <text x="252" y="242" text-anchor="middle" fill="#8b949e" font-size="7">14t</text>
+    <line x1="252" y1="200" x2="252" y2="15" stroke="#8b949e" stroke-width="1.5" stroke-dasharray="4,2" opacity="0.4"/>
+
+    <!-- Explainer text -->
+    <g transform="translate(300, 80)">
+      <rect x="0" y="0" width="210" height="160" fill="#161b22" stroke="#30363d" stroke-width="1" rx="5"/>
+      <text x="10" y="18" fill="#e6edf3" font-size="10" font-weight="bold">钢缆系统说明</text>
+      <text x="10" y="38" fill="#8b949e" font-size="9">1. 每环4根钢缆 φ28mm (共8根)</text>
+      <text x="10" y="55" fill="#8b949e" font-size="9">2. 卷扬机在塔底 → 钢缆沿塔柱</text>
+      <text x="20" y="70" fill="#8b949e" font-size="9">侧面上升至顶部滑轮平台</text>
+      <text x="10" y="87" fill="#8b949e" font-size="9">3. 钢缆绕过顶部滑轮 → 转弯180°</text>
+      <text x="10" y="104" fill="#8b949e" font-size="9">4. 钢缆垂直向下 → 连接滑架吊点</text>
+      <text x="10" y="121" fill="#8b949e" font-size="9">5. 卷扬机收缆 → 滑架上升</text>
+      <text x="20" y="136" fill="#8b949e" font-size="9">卷扬机放缆 → 滑架下降(重力)</text>
+      <text x="10" y="153" fill="#d29922" font-size="9">▶ 钢缆垂直段 = 滑架升降方向</text>
+      <text x="10" y="168" fill="#8b949e" font-size="9">▶ 配重平衡65%负载, 降低功率</text>
+    </g>
+  </g>
+
+  <!-- ================================================================ -->
+  <!--  SUMMARY TABLE -->
+  <!-- ================================================================ -->
+  <g transform="translate(440,950)">
+    <!-- Key parameters bar -->
+    <rect x="0" y="0" width="920" height="40" fill="#161b22" stroke="#30363d" stroke-width="1" rx="5"/>
+    <text x="15" y="17" fill="#8b949e" font-size="10">塔柱 □3m×3m Q345桁架</text>
+    <text x="195" y="17" fill="#30363d" font-size="10">│</text>
+    <text x="210" y="17" fill="#8b949e" font-size="10">8条导轨(4内+4外)</text>
+    <text x="365" y="17" fill="#30363d" font-size="10">│</text>
+    <text x="380" y="17" fill="#ff6b6b" font-size="10">内环 φ12m 红队 ↻</text>
+    <text x="525" y="17" fill="#30363d" font-size="10">│</text>
+    <text x="540" y="17" fill="#4da6ff" font-size="10">外环 φ16m 蓝队 ↺</text>
+    <text x="695" y="17" fill="#30363d" font-size="10">│</text>
+    <text x="710" y="17" fill="#8b949e" font-size="10">钢缆 φ28mm ×8根 安全系数≥18</text>
+    <text x="15" y="33" fill="#8b949e" font-size="9">总高50m · 载客40人 · 装机~610kW · 乘客加速度≤1.2g</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="700" y="995" text-anchor="middle" fill="#484f5a" font-size="10">中南大学 | 2026游乐设施创意设计赛 | 天袭中队总体结构图 | 在浏览器打开查看</text>
+</svg>

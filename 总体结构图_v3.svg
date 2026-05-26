@@ -1,0 +1,325 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" style="background:#0d1117;font-family:Arial,sans-serif">
+  <defs>
+    <linearGradient id="discGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4a5568"/><stop offset="100%" stop-color="#3a4454"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1520"/><stop offset="100%" stop-color="#1a2535"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1400" height="1000" fill="url(#sky)"/>
+  <line x1="0" y1="885" x2="1400" y2="885" stroke="#30363d" stroke-width="2"/>
+  <rect x="0" y="885" width="1400" height="115" fill="#0d1117"/>
+
+  <text x="700" y="32" text-anchor="middle" fill="#e6edf3" font-size="20" font-weight="bold">天袭中队 — 总体结构图 v3</text>
+  <text x="700" y="52" text-anchor="middle" fill="#8b949e" font-size="12">顶部大圆盘 + 8根光轴导向 + 齿轮旋转 + 垂直缆绳 | 塔高50m · 同心双环 · 3rpm</text>
+
+  <!-- ============ LEFT: ELEVATION ============ -->
+  <g transform="translate(55,68)">
+    <text x="250" y="0" text-anchor="middle" fill="#e6edf3" font-size="15" font-weight="bold">正视图</text>
+
+    <!-- Ground -->
+    <rect x="30" y="780" width="440" height="6" fill="#1a2535"/>
+    <rect x="60" y="785" width="380" height="32" fill="#1c2333" stroke="#30363d" stroke-width="2" rx="3"/>
+    <text x="250" y="806" text-anchor="middle" fill="#8b949e" font-size="10">C30钢筋混凝土基础 (光轴下端锚固)</text>
+
+    <!-- Central tower -->
+    <rect x="219" y="70" width="62" height="715" fill="#2a3040" stroke="#586478" stroke-width="2"/>
+    <line x1="219" y1="130" x2="281" y2="170" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="130" x2="219" y2="170" stroke="#4a5568" stroke-width="1"/>
+    <line x1="219" y1="220" x2="281" y2="260" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="220" x2="219" y2="260" stroke="#4a5568" stroke-width="1"/>
+    <line x1="219" y1="310" x2="281" y2="350" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="310" x2="219" y2="350" stroke="#4a5568" stroke-width="1"/>
+    <line x1="219" y1="400" x2="281" y2="440" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="400" x2="219" y2="440" stroke="#4a5568" stroke-width="1"/>
+    <line x1="219" y1="490" x2="281" y2="530" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="490" x2="219" y2="530" stroke="#4a5568" stroke-width="1"/>
+    <line x1="219" y1="580" x2="281" y2="620" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="580" x2="219" y2="620" stroke="#4a5568" stroke-width="1"/>
+    <line x1="219" y1="670" x2="281" y2="710" stroke="#4a5568" stroke-width="1"/>
+    <line x1="281" y1="670" x2="219" y2="710" stroke="#4a5568" stroke-width="1"/>
+
+    <text x="250" y="66" text-anchor="middle" fill="#8b949e" font-size="9">中央塔柱 □3m×3m Q345桁架</text>
+
+    <!-- Top disc -->
+    <rect x="60" y="48" width="380" height="22" fill="url(#discGrad)" stroke="#8b9bb5" stroke-width="3" rx="3"/>
+    <text x="250" y="42" text-anchor="middle" fill="#d29922" font-size="12" font-weight="bold">+50.0m 顶部大圆盘 (电机+滑轮平台)</text>
+
+    <!-- Outer motors on disc -->
+    <rect x="70" y="42" width="18" height="28" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <circle cx="79" cy="48" r="6" fill="none" stroke="#4da6ff" stroke-width="1.5"/>
+    <text x="79" y="82" text-anchor="middle" fill="#4da6ff" font-size="7">外电机+滑轮</text>
+
+    <rect x="412" y="42" width="18" height="28" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <circle cx="421" cy="48" r="6" fill="none" stroke="#4da6ff" stroke-width="1.5"/>
+
+    <!-- Inner motors on disc -->
+    <rect x="140" y="42" width="16" height="24" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+    <circle cx="148" cy="48" r="5" fill="none" stroke="#ff6b6b" stroke-width="1.5"/>
+    <text x="148" y="82" text-anchor="middle" fill="#ff6b6b" font-size="7">内电机+滑轮</text>
+
+    <rect x="344" y="42" width="16" height="24" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+    <circle cx="352" cy="48" r="5" fill="none" stroke="#ff6b6b" stroke-width="1.5"/>
+
+    <!-- Annular slot -->
+    <rect x="180" y="54" width="140" height="10" fill="#0d1117" stroke="#4a5568" stroke-width="0.5" rx="2"/>
+    <text x="250" y="62" text-anchor="middle" fill="#4a5568" font-size="7">环形减重槽(留出空间)</text>
+
+    <!-- Outer guide shafts (2 of 4 visible) -->
+    <line x1="90" y1="70" x2="90" y2="780" stroke="#4da6ff" stroke-width="4" stroke-dasharray="12,4" opacity="0.7"/>
+    <text x="90" y="798" text-anchor="middle" fill="#4da6ff" font-size="8">外光轴1</text>
+
+    <line x1="410" y1="70" x2="410" y2="780" stroke="#4da6ff" stroke-width="4" stroke-dasharray="12,4" opacity="0.7"/>
+    <text x="410" y="798" text-anchor="middle" fill="#4da6ff" font-size="8">外光轴3</text>
+
+    <!-- Inner guide shafts (2 of 4 visible) -->
+    <line x1="165" y1="70" x2="165" y2="780" stroke="#ff6b6b" stroke-width="4" stroke-dasharray="10,4" opacity="0.7"/>
+    <text x="165" y="798" text-anchor="middle" fill="#ff6b6b" font-size="8">内光轴1</text>
+
+    <line x1="335" y1="70" x2="335" y2="780" stroke="#ff6b6b" stroke-width="4" stroke-dasharray="10,4" opacity="0.7"/>
+    <text x="335" y="798" text-anchor="middle" fill="#ff6b6b" font-size="8">内光轴3</text>
+
+    <!-- === OUTER RING (BLUE) === -->
+    <line x1="79" y1="42" x2="79" y2="480" stroke="#4da6ff" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+    <line x1="421" y1="42" x2="421" y2="480" stroke="#4da6ff" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+
+    <rect x="80" y="475" width="340" height="20" fill="#1a3050" stroke="#4da6ff" stroke-width="2.5" rx="3"/>
+    <text x="250" y="490" text-anchor="middle" fill="#4da6ff" font-size="9" font-weight="bold">外环导套 (沿4根外光轴滑动, 不旋转)</text>
+    <circle cx="90" cy="485" r="4" fill="#4da6ff"/>
+    <circle cx="410" cy="485" r="4" fill="#4da6ff"/>
+
+    <!-- Rotation motor + pinion -->
+    <rect x="200" y="495" width="20" height="16" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <circle cx="210" cy="503" r="5" fill="none" stroke="#4da6ff" stroke-width="1.5"/>
+    <circle cx="230" cy="508" r="3" fill="#4da6ff"/>
+    <text x="245" y="510" fill="#4da6ff" font-size="7">小齿轮</text>
+
+    <!-- Gear teeth -->
+    <line x1="235" y1="515" x2="235" y2="530" stroke="#4da6ff" stroke-width="0.5"/>
+    <line x1="240" y1="515" x2="240" y2="530" stroke="#4da6ff" stroke-width="0.5"/>
+    <line x1="245" y1="515" x2="245" y2="530" stroke="#4da6ff" stroke-width="0.5"/>
+    <line x1="250" y1="515" x2="250" y2="530" stroke="#4da6ff" stroke-width="0.5"/>
+    <line x1="255" y1="515" x2="255" y2="530" stroke="#4da6ff" stroke-width="0.5"/>
+
+    <!-- Slewing bearing -->
+    <rect x="130" y="520" width="240" height="6" fill="#2a4a6a" stroke="#4da6ff" stroke-width="1"/>
+    <text x="250" y="534" text-anchor="middle" fill="#4da6ff" font-size="7">回转支承 φ3.5m (内圈固定/外圈带齿形)</text>
+
+    <!-- Ring truss -->
+    <line x1="60" y1="538" x2="440" y2="538" stroke="#4da6ff" stroke-width="5"/>
+    <line x1="60" y1="552" x2="440" y2="552" stroke="#4da6ff" stroke-width="4"/>
+    <text x="250" y="570" text-anchor="middle" fill="#4da6ff" font-size="9" font-weight="bold">外环桁架 φ16m (与舱体连接, 带齿形可旋转)</text>
+
+    <!-- Cantilevers + capsules -->
+    <line x1="60" y1="545" x2="30" y2="600" stroke="#4da6ff" stroke-width="2.5"/>
+    <rect x="5" y="595" width="50" height="25" fill="#1a3a5c" stroke="#4da6ff" stroke-width="2" rx="4"/>
+    <text x="30" y="601" text-anchor="middle" fill="#4da6ff" font-size="7">🔵 蓝舱</text>
+    <text x="30" y="616" text-anchor="middle" fill="#8b949e" font-size="6">朝内</text>
+
+    <line x1="440" y1="545" x2="470" y2="600" stroke="#4da6ff" stroke-width="2.5"/>
+    <rect x="445" y="595" width="50" height="25" fill="#1a3a5c" stroke="#4da6ff" stroke-width="2" rx="4"/>
+    <text x="470" y="601" text-anchor="middle" fill="#4da6ff" font-size="7">🔵 蓝舱</text>
+
+    <!-- === INNER RING (RED) === -->
+    <line x1="148" y1="42" x2="148" y2="320" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+    <line x1="352" y1="42" x2="352" y2="320" stroke="#ff6b6b" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+
+    <rect x="155" y="315" width="190" height="18" fill="#3a1515" stroke="#ff6b6b" stroke-width="2.5" rx="3"/>
+    <text x="250" y="328" text-anchor="middle" fill="#ff6b6b" font-size="9" font-weight="bold">内环导套 (沿4根内光轴滑动, 不旋转)</text>
+    <circle cx="165" cy="324" r="3.5" fill="#ff6b6b"/>
+    <circle cx="335" cy="324" r="3.5" fill="#ff6b6b"/>
+
+    <!-- Rotation motor + pinion -->
+    <rect x="260" y="333" width="16" height="14" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+    <circle cx="268" cy="340" r="4" fill="none" stroke="#ff6b6b" stroke-width="1.5"/>
+    <circle cx="282" cy="345" r="3" fill="#ff6b6b"/>
+
+    <!-- Slewing bearing + ring -->
+    <rect x="165" y="358" width="170" height="5" fill="#4a2020" stroke="#ff6b6b" stroke-width="1"/>
+    <line x1="120" y1="375" x2="380" y2="375" stroke="#ff6b6b" stroke-width="4"/>
+    <line x1="120" y1="388" x2="380" y2="388" stroke="#ff6b6b" stroke-width="3"/>
+    <text x="250" y="403" text-anchor="middle" fill="#ff6b6b" font-size="9" font-weight="bold">内环桁架 φ12m (与舱体连接, 带齿形可旋转)</text>
+
+    <!-- Cantilevers + capsules -->
+    <line x1="120" y1="381" x2="100" y2="430" stroke="#ff6b6b" stroke-width="2.5"/>
+    <rect x="75" y="425" width="50" height="25" fill="#4a1515" stroke="#ff6b6b" stroke-width="2" rx="4"/>
+    <text x="100" y="431" text-anchor="middle" fill="#ff6b6b" font-size="7">🔴 红舱</text>
+    <text x="100" y="446" text-anchor="middle" fill="#8b949e" font-size="6">朝外</text>
+
+    <line x1="380" y1="381" x2="400" y2="430" stroke="#ff6b6b" stroke-width="2.5"/>
+    <rect x="375" y="425" width="50" height="25" fill="#4a1515" stroke="#ff6b6b" stroke-width="2" rx="4"/>
+    <text x="400" y="431" text-anchor="middle" fill="#ff6b6b" font-size="7">🔴 红舱</text>
+
+    <!-- Height marks -->
+    <line x1="445" y1="70" x2="458" y2="70" stroke="#d29922" stroke-width="0.6"/>
+    <text x="462" y="73" fill="#d29922" font-size="9">+50m</text>
+    <line x1="445" y1="785" x2="458" y2="785" stroke="#d29922" stroke-width="0.6"/>
+    <text x="462" y="788" fill="#d29922" font-size="9">0m</text>
+  </g>
+
+  <!-- ============ RIGHT: TOP VIEW ============ -->
+  <g transform="translate(590,68)">
+    <text x="370" y="0" text-anchor="middle" fill="#e6edf3" font-size="15" font-weight="bold">俯视图 — 顶部大圆盘 + 光轴均布</text>
+
+    <circle cx="370" cy="420" r="350" fill="none" stroke="#1a2030" stroke-width="1.5" stroke-dasharray="4,8"/>
+    <text x="370" y="785" text-anchor="middle" fill="#30363d" font-size="9">安全围栏 φ22m</text>
+
+    <circle cx="370" cy="420" r="280" fill="none" stroke="#4da6ff" stroke-width="1" stroke-dasharray="6,6" opacity="0.2"/>
+    <circle cx="370" cy="420" r="220" fill="none" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="6,6" opacity="0.2"/>
+
+    <!-- Top disc -->
+    <circle cx="370" cy="420" r="290" fill="#2a3040" stroke="#8b9bb5" stroke-width="3"/>
+    <text x="370" y="325" text-anchor="middle" fill="#8b9bb5" font-size="11" font-weight="bold">顶部大圆盘 φ约11m</text>
+    <text x="370" y="340" text-anchor="middle" fill="#8b949e" font-size="9">搭载全部电机+滑轮</text>
+
+    <!-- Annular slot -->
+    <circle cx="370" cy="420" r="180" fill="none" stroke="#4a5568" stroke-width="2" stroke-dasharray="3,6"/>
+    <circle cx="370" cy="420" r="100" fill="none" stroke="#4a5568" stroke-width="2" stroke-dasharray="3,6"/>
+    <text x="370" y="610" text-anchor="middle" fill="#4a5568" font-size="8">环形减重槽(环槽)</text>
+
+    <!-- Center tower -->
+    <rect x="340" y="390" width="60" height="60" fill="#3a4454" stroke="#6e7d95" stroke-width="2.5"/>
+    <text x="370" y="418" text-anchor="middle" fill="#e6edf3" font-size="10" font-weight="bold">塔柱</text>
+    <text x="370" y="432" text-anchor="middle" fill="#8b949e" font-size="8">□3×3</text>
+
+    <!-- Outer guide shafts (4, r=250) -->
+    <circle cx="370" cy="170" r="8" fill="#4da6ff" stroke="#4da6ff" stroke-width="2.5"/>
+    <text x="350" y="155" fill="#4da6ff" font-size="9" font-weight="bold">外光轴1</text>
+
+    <circle cx="620" cy="420" r="8" fill="#4da6ff" stroke="#4da6ff" stroke-width="2.5"/>
+    <text x="633" y="425" fill="#4da6ff" font-size="9" font-weight="bold">外光轴2</text>
+
+    <circle cx="370" cy="670" r="8" fill="#4da6ff" stroke="#4da6ff" stroke-width="2.5"/>
+    <text x="350" y="695" fill="#4da6ff" font-size="9" font-weight="bold">外光轴3</text>
+
+    <circle cx="120" cy="420" r="8" fill="#4da6ff" stroke="#4da6ff" stroke-width="2.5"/>
+    <text x="75" y="425" fill="#4da6ff" font-size="9" font-weight="bold">外光轴4</text>
+
+    <circle cx="370" cy="420" r="250" fill="none" stroke="#4da6ff" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
+    <text x="590" y="355" fill="#4da6ff" font-size="8" opacity="0.5">均布半径 r=5.5m</text>
+
+    <!-- Inner guide shafts (4, r=140) -->
+    <circle cx="370" cy="280" r="7" fill="#ff6b6b" stroke="#ff6b6b" stroke-width="2.5"/>
+    <text x="348" y="270" fill="#ff6b6b" font-size="9" font-weight="bold">内光轴1</text>
+
+    <circle cx="510" cy="420" r="7" fill="#ff6b6b" stroke="#ff6b6b" stroke-width="2.5"/>
+    <text x="518" y="435" fill="#ff6b6b" font-size="9" font-weight="bold">内光轴2</text>
+
+    <circle cx="370" cy="560" r="7" fill="#ff6b6b" stroke="#ff6b6b" stroke-width="2.5"/>
+    <text x="348" y="585" fill="#ff6b6b" font-size="9" font-weight="bold">内光轴3</text>
+
+    <circle cx="230" cy="420" r="7" fill="#ff6b6b" stroke="#ff6b6b" stroke-width="2.5"/>
+    <text x="188" y="435" fill="#ff6b6b" font-size="9" font-weight="bold">内光轴4</text>
+
+    <circle cx="370" cy="420" r="140" fill="none" stroke="#ff6b6b" stroke-width="1" stroke-dasharray="4,3" opacity="0.3"/>
+    <text x="485" y="370" fill="#ff6b6b" font-size="8" opacity="0.5">均布半径 r=4m</text>
+
+    <!-- Motors on disc (outer) -->
+    <rect x="300" y="228" width="28" height="20" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <circle cx="314" cy="234" r="5" fill="none" stroke="#4da6ff" stroke-width="1"/>
+    <text x="314" y="223" text-anchor="middle" fill="#4da6ff" font-size="6">外电机1</text>
+
+    <rect x="482" y="578" width="28" height="20" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <rect x="410" y="592" width="28" height="20" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <rect x="305" y="592" width="28" height="20" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+
+    <!-- Motors on disc (inner) -->
+    <rect x="355" y="332" width="20" height="16" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+    <rect x="442" y="465" width="20" height="16" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+    <rect x="358" y="496" width="20" height="16" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+    <rect x="275" y="465" width="20" height="16" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="1.5" rx="2"/>
+
+    <!-- Cable holes -->
+    <circle cx="314" cy="248" r="4" fill="#0d1520" stroke="#4da6ff" stroke-width="1"/>
+    <circle cx="504" cy="598" r="4" fill="#0d1520" stroke="#4da6ff" stroke-width="1"/>
+    <circle cx="438" cy="612" r="4" fill="#0d1520" stroke="#4da6ff" stroke-width="1"/>
+    <circle cx="333" cy="612" r="4" fill="#0d1520" stroke="#4da6ff" stroke-width="1"/>
+
+    <circle cx="375" cy="348" r="3" fill="#0d1520" stroke="#ff6b6b" stroke-width="1"/>
+    <circle cx="462" cy="481" r="3" fill="#0d1520" stroke="#ff6b6b" stroke-width="1"/>
+    <circle cx="378" cy="512" r="3" fill="#0d1520" stroke="#ff6b6b" stroke-width="1"/>
+    <circle cx="295" cy="481" r="3" fill="#0d1520" stroke="#ff6b6b" stroke-width="1"/>
+
+    <!-- Legend -->
+    <g transform="translate(25, 670)">
+      <rect x="0" y="0" width="270" height="100" fill="#161b22" stroke="#30363d" stroke-width="1" rx="4"/>
+      <text x="12" y="18" fill="#e6edf3" font-size="10" font-weight="bold">图例</text>
+      <circle cx="18" cy="32" r="4" fill="#4da6ff"/>
+      <text x="28" y="36" fill="#4da6ff" font-size="9">外环光轴 ×4 (均布 r=5.5m, 上下固定)</text>
+      <circle cx="18" cy="50" r="4" fill="#ff6b6b"/>
+      <text x="28" y="54" fill="#ff6b6b" font-size="9">内环光轴 ×4 (均布 r=4m, 上下固定)</text>
+      <rect x="14" y="60" width="8" height="6" fill="#3a5070" stroke="#4da6ff" stroke-width="0.8" rx="1"/>
+      <text x="28" y="68" fill="#4da6ff" font-size="9">外电机+滑轮 ×4 (大圆盘外侧)</text>
+      <rect x="14" y="74" width="8" height="6" fill="#4a1a1a" stroke="#ff6b6b" stroke-width="0.8" rx="1"/>
+      <text x="28" y="82" fill="#ff6b6b" font-size="9">内电机+滑轮 ×4 (大圆盘内侧)</text>
+      <circle cx="17" cy="92" r="3" fill="#0d1520" stroke="#4da6ff" stroke-width="0.8"/>
+      <text x="28" y="96" fill="#8b949e" font-size="9">缆绳穿孔 (钢缆通过)</text>
+    </g>
+  </g>
+
+  <!-- ============ BOTTOM: GEAR DETAIL ============ -->
+  <g transform="translate(55,520)">
+    <rect x="0" y="0" width="520" height="250" fill="#161b22" stroke="#30363d" stroke-width="1.5" rx="6"/>
+    <text x="20" y="22" fill="#e6edf3" font-size="13" font-weight="bold">齿轮旋转机构详图 (类似挖掘机回转)</text>
+
+    <!-- Guide shaft + sleeve + ring side view -->
+    <line x1="150" y1="50" x2="150" y2="220" stroke="#4da6ff" stroke-width="5" opacity="0.7"/>
+    <text x="140" y="138" text-anchor="end" fill="#4da6ff" font-size="8">外光轴</text>
+    <text x="140" y="150" text-anchor="end" fill="#4da6ff" font-size="7">(上下固定)</text>
+
+    <!-- Guide sleeve -->
+    <rect x="130" y="80" width="270" height="18" fill="#1a3050" stroke="#4da6ff" stroke-width="2" rx="2"/>
+    <text x="265" y="92" text-anchor="middle" fill="#4da6ff" font-size="9" font-weight="bold">导套 (直线轴承沿光轴滑动, 不旋转)</text>
+    <circle cx="150" cy="89" r="5" fill="#4da6ff" opacity="0.8"/>
+
+    <!-- Motor + pinion -->
+    <rect x="180" y="98" width="24" height="20" fill="#3a5070" stroke="#4da6ff" stroke-width="1.5" rx="2"/>
+    <circle cx="192" cy="108" r="7" fill="none" stroke="#4da6ff" stroke-width="1.5"/>
+    <text x="192" y="130" text-anchor="middle" fill="#4da6ff" font-size="7">旋转电机</text>
+    <circle cx="220" cy="113" r="5" fill="#4da6ff"/>
+    <text x="220" y="105" text-anchor="middle" fill="#4da6ff" font-size="6">小齿轮</text>
+
+    <!-- Slewing bearing -->
+    <rect x="155" y="130" width="230" height="8" fill="#2a4a6a" stroke="#4da6ff" stroke-width="1.5"/>
+    <text x="270" y="122" fill="#4da6ff" font-size="7">回转支承(大轴承)</text>
+    <text x="270" y="142" text-anchor="middle" fill="#8b949e" font-size="7">内圈固连导套 · 外圈带齿形</text>
+
+    <!-- Ring with gear teeth -->
+    <rect x="140" y="160" width="260" height="28" fill="none" stroke="#4da6ff" stroke-width="2" rx="2"/>
+    <text x="270" y="173" text-anchor="middle" fill="#4da6ff" font-size="9" font-weight="bold">环体桁架 (连接胶囊, 可旋转)</text>
+
+    <!-- Gear teeth on ring outer surface -->
+    <line x1="225" y1="138" x2="227" y2="155" stroke="#4da6ff" stroke-width="0.8"/>
+    <line x1="233" y1="138" x2="235" y2="155" stroke="#4da6ff" stroke-width="0.8"/>
+    <line x1="241" y1="138" x2="243" y2="155" stroke="#4da6ff" stroke-width="0.8"/>
+    <line x1="249" y1="138" x2="251" y2="155" stroke="#4da6ff" stroke-width="0.8"/>
+    <line x1="257" y1="138" x2="259" y2="155" stroke="#4da6ff" stroke-width="0.8"/>
+    <text x="280" y="146" fill="#4da6ff" font-size="6">外齿圈</text>
+    <text x="280" y="155" fill="#4da6ff" font-size="6">(与小齿轮啮合)</text>
+
+    <!-- Rotation arrow -->
+    <path d="M 415 174 A 10 10 0 0 1 425 184" fill="none" stroke="#4da6ff" stroke-width="1.5"/>
+    <polygon points="423,182 428,189 420,187" fill="#4da6ff"/>
+    <text x="435" y="182" fill="#4da6ff" font-size="8">↺ 3rpm</text>
+
+    <text x="270" y="225" text-anchor="middle" fill="#d29922" font-size="9">力传递: 电机 → 小齿轮 → 外齿圈 → 回转支承外圈 → 环体旋转</text>
+    <text x="270" y="240" text-anchor="middle" fill="#8b949e" font-size="8">导套不旋转(仅升降) | 回转支承分界: 以上不转, 以下旋转</text>
+  </g>
+
+  <!-- Summary bar -->
+  <g transform="translate(590,850)">
+    <rect x="0" y="0" width="750" height="36" fill="#161b22" stroke="#30363d" stroke-width="1" rx="5"/>
+    <text x="15" y="15" fill="#8b949e" font-size="9">塔柱 □3×3 Q345桁架</text>
+    <text x="175" y="15" fill="#30363d">│</text>
+    <text x="190" y="15" fill="#8b949e" font-size="9">顶部大圆盘 φ11m 搭载8组电机+滑轮</text>
+    <text x="395" y="15" fill="#30363d">│</text>
+    <text x="410" y="15" fill="#ff6b6b" font-size="9">内光轴×4 均布r=4m</text>
+    <text x="540" y="15" fill="#30363d">│</text>
+    <text x="555" y="15" fill="#4da6ff" font-size="9">外光轴×4 均布r=5.5m</text>
+    <text x="700" y="15" fill="#30363d">│</text>
+    <text x="715" y="15" fill="#8b949e" font-size="9">3rpm · 钢缆φ28 · 载客40人</text>
+    <text x="15" y="31" fill="#8b949e" font-size="9">每环: 导套沿光轴升降(不旋转) → 电机+小齿轮驱动回转支承齿圈 → 环体旋转 → 胶囊绕塔公转</text>
+  </g>
+</svg>

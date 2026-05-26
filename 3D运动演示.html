@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>天袭中队 — 3D运动演示</title>
+<style>
+  * { margin:0; padding:0; }
+  body { background:#0a0f18; overflow:hidden; font-family:Arial,sans-serif; }
+  #info {
+    position:fixed; top:12px; left:50%; transform:translateX(-50%);
+    background:#161b22e8; border:1px solid #30363d; border-radius:8px;
+    padding:10px 20px; text-align:center; z-index:10; pointer-events:none;
+  }
+  #info h1 { font-size:15px; color:#e6edf3; margin:0 0 2px; }
+  #info p { font-size:11px; color:#8b949e; margin:0; }
+  #legend {
+    position:fixed; bottom:12px; left:50%; transform:translateX(-50%);
+    background:#161b22e8; border:1px solid #30363d; border-radius:8px;
+    padding:6px 18px; font-size:11px; z-index:10; display:flex; gap:20px;
+    pointer-events:none;
+  }
+  .red { color:#ff6b6b; } .blue { color:#4da6ff; }
+  #help { position:fixed; top:12px; right:16px; color:#484f5a; font-size:10px; z-index:10; pointer-events:none; }
+</style>
+</head>
+<body>
+<div id="info">
+  <h1>天袭中队 — 3D运动演示</h1>
+  <p>塔高50m · 内环φ12m/外环φ16m · <span class="red">内光轴r=3.5m</span> · <span class="blue">外光轴r=9.5m</span> · 3rpm</p>
+</div>
+<div id="legend">
+  <span class="red">■ 内环(红) ↻ 3rpm</span>
+  <span class="blue">■ 外环(蓝) ↺ 3rpm</span>
+  <span style="color:#8b949e">■ 光轴(固定)</span>
+  <span style="color:#d29922">■ 钢缆</span>
+</div>
+<div id="help">🖱 拖拽旋转 | 滚轮缩放 | 右键平移</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.157.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0d1117);
+scene.fog = new THREE.Fog(0x0d1117, 60, 200);
+
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 1, 300);
+camera.position.set(35, 25, 45);
+camera.lookAt(0, 20, 0);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 22, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.maxPolarAngle = Math.PI * 0.6;
+controls.update();
+
+// Lighting
+scene.add(new THREE.AmbientLight(0x334466, 1.5));
+const sun = new THREE.DirectionalLight(0xffeedd, 3);
+sun.position.set(30, 60, 20);
+sun.castShadow = true;
+scene.add(sun);
+const hemi = new THREE.HemisphereLight(0x8899cc, 0x223344, 0.5);
+scene.add(hemi);
+
+// Ground
+const groundGeo = new THREE.PlaneGeometry(80, 80);
+const groundMat = new THREE.MeshStandardMaterial({color:0x1a2028, roughness:0.95});
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI/2;
+ground.position.y = 0;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Grid helper
+const grid = new THREE.PolarGridHelper(11, 32, 16, 128, 0x30363d, 0x252a33);
+grid.position.y = 0.02;
+scene.add(grid);
+
+// Foundation ring
+const foundGeo = new THREE.TorusGeometry(10.5, 0.4, 16, 64);
+const foundMat = new THREE.MeshStandardMaterial({color:0x2a3040, roughness:0.6, metalness:0.3});
+const foundation = new THREE.Mesh(foundGeo, foundMat);
+foundation.rotation.x = -Math.PI/2;
+foundation.position.y = 0.1;
+foundation.receiveShadow = true;
+scene.add(foundation);
+
+// ============ TOWER ============
+const TOWER_H = 50;
+const TOWER_HALF = 1.5; // half of 3m
+
+function createTowerColumn(x, z) {
+  const geo = new THREE.CylinderGeometry(0.305, 0.305, TOWER_H, 16);
+  const mat = new THREE.MeshStandardMaterial({color:0x586478, roughness:0.4, metalness:0.6});
+  const col = new THREE.Mesh(geo, mat);
+  col.position.set(x, TOWER_H/2, z);
+  col.castShadow = true;
+  return col;
+}
+
+function createBrace(x1, z1, x2, z2, y) {
+  const dx = x2-x1, dz = z2-z1;
+  const len = Math.sqrt(dx*dx+dz*dz);
+  const geo = new THREE.CylinderGeometry(0.12, 0.12, len, 8);
+  const mat = new THREE.MeshStandardMaterial({color:0x4a5568, roughness:0.5, metalness:0.5});
+  const brace = new THREE.Mesh(geo, mat);
+  brace.position.set((x1+x2)/2, y, (z1+z2)/2);
+  brace.rotation.z = Math.PI/2;
+  brace.rotation.y = Math.atan2(dz, dx);
+  return brace;
+}
+
+const towerGroup = new THREE.Group();
+
+// 4 main columns
+towerGroup.add(createTowerColumn(-TOWER_HALF, -TOWER_HALF));
+towerGroup.add(createTowerColumn( TOWER_HALF, -TOWER_HALF));
+towerGroup.add(createTowerColumn(-TOWER_HALF,  TOWER_HALF));
+towerGroup.add(createTowerColumn( TOWER_HALF,  TOWER_HALF));
+
+// Cross braces every 3m
+for (let y = 3; y < TOWER_H; y += 3) {
+  // Horizontal braces
+  towerGroup.add(createBrace(-TOWER_HALF,-TOWER_HALF, TOWER_HALF,-TOWER_HALF, y));
+  towerGroup.add(createBrace( TOWER_HALF,-TOWER_HALF, TOWER_HALF, TOWER_HALF, y));
+  towerGroup.add(createBrace( TOWER_HALF, TOWER_HALF,-TOWER_HALF, TOWER_HALF, y));
+  towerGroup.add(createBrace(-TOWER_HALF, TOWER_HALF,-TOWER_HALF,-TOWER_HALF, y));
+  // Diagonal braces (alternating)
+  if (Math.floor(y/3) % 2 === 0) {
+    towerGroup.add(createBrace(-TOWER_HALF,-TOWER_HALF, TOWER_HALF, TOWER_HALF, y));
+    towerGroup.add(createBrace( TOWER_HALF,-TOWER_HALF,-TOWER_HALF, TOWER_HALF, y));
+  } else {
+    towerGroup.add(createBrace(-TOWER_HALF, TOWER_HALF, TOWER_HALF,-TOWER_HALF, y));
+    towerGroup.add(createBrace( TOWER_HALF, TOWER_HALF,-TOWER_HALF,-TOWER_HALF, y));
+  }
+}
+
+scene.add(towerGroup);
+
+// ============ TOP DISC ============
+const discGroup = new THREE.Group();
+discGroup.position.y = TOWER_H;
+
+// Disc ring
+const discGeo = new THREE.TorusGeometry(10, 0.3, 16, 64);
+const discMat = new THREE.MeshStandardMaterial({color:0x5a6a80, roughness:0.3, metalness:0.7});
+const disc = new THREE.Mesh(discGeo, discMat);
+disc.rotation.x = -Math.PI/2;
+disc.castShadow = true;
+discGroup.add(disc);
+
+// Disc inner structure (spokes)
+for (let i = 0; i < 8; i++) {
+  const angle = i * Math.PI/4;
+  const x = 1.5 * Math.cos(angle);
+  const z = 1.5 * Math.sin(angle);
+  const spokeGeo = new THREE.CylinderGeometry(0.08, 0.08, 8.5, 8);
+  const spoke = new THREE.Mesh(spokeGeo, discMat);
+  spoke.position.set(x, 0, z);
+  spoke.rotation.z = Math.PI/2;
+  spoke.rotation.y = -angle;
+  discGroup.add(spoke);
+}
+
+// Annular slot indicator (inner ring)
+const slotGeo = new THREE.TorusGeometry(6.5, 0.05, 8, 64);
+const slotMat = new THREE.MeshBasicMaterial({color:0x4a5568});
+const slot = new THREE.Mesh(slotGeo, slotMat);
+slot.rotation.x = -Math.PI/2;
+discGroup.add(slot);
+
+// Motors on disc (outer - blue)
+function addMotor(angle, radius, color) {
+  const motorGroup = new THREE.Group();
+  const bodyGeo = new THREE.BoxGeometry(0.4, 0.5, 0.6);
+  const bodyMat = new THREE.MeshStandardMaterial({color, roughness:0.4, metalness:0.6});
+  const body = new THREE.Mesh(bodyGeo, bodyMat);
+  motorGroup.add(body);
+  // Sheave (wheel)
+  const sheaveGeo = new THREE.TorusGeometry(0.2, 0.05, 8, 16);
+  const sheave = new THREE.Mesh(sheaveGeo, new THREE.MeshStandardMaterial({color:0x9198a1, roughness:0.2, metalness:0.8}));
+  sheave.position.y = 0.25;
+  motorGroup.add(sheave);
+  // Position
+  motorGroup.position.x = radius * Math.cos(angle);
+  motorGroup.position.z = radius * Math.sin(angle);
+  motorGroup.position.y = 0.3;
+  return motorGroup;
+}
+
+// Outer motors (blue) at r=9.5m, angle offset 45° from shafts
+for (let i = 0; i < 4; i++) {
+  const angle = i * Math.PI/2 + Math.PI/4; // 45° offset
+  discGroup.add(addMotor(angle, 9.5, 0x4da6ff));
+}
+// Inner motors (red) at r=3.5m
+for (let i = 0; i < 4; i++) {
+  const angle = i * Math.PI/2 + Math.PI/8;
+  discGroup.add(addMotor(angle, 3.5, 0xff6b6b));
+}
+
+scene.add(discGroup);
+
+// ============ GUIDE SHAFTS ============
+function createShaft(angle, radius, color) {
+  const x = radius * Math.cos(angle);
+  const z = radius * Math.sin(angle);
+  const geo = new THREE.CylinderGeometry(0.08, 0.08, TOWER_H, 12);
+  const mat = new THREE.MeshStandardMaterial({color, roughness:0.3, metalness:0.7, emissive:color, emissiveIntensity:0.15});
+  const shaft = new THREE.Mesh(geo, mat);
+  shaft.position.set(x, TOWER_H/2, z);
+  shaft.castShadow = true;
+  return shaft;
+}
+
+// Inner shafts (red, r=3.5m)
+for (let i = 0; i < 4; i++) {
+  scene.add(createShaft(i * Math.PI/2, 3.5, 0xff4444));
+}
+// Outer shafts (blue, r=9.5m, offset 45°)
+for (let i = 0; i < 4; i++) {
+  scene.add(createShaft(i * Math.PI/2 + Math.PI/4, 9.5, 0x3388ee));
+}
+
+// ============ RING ASSEMBLIES ============
+// Each ring = guide sleeve (slides on shafts) + slewing bearing + truss + capsules
+
+function createRingAssembly(shaftRadius, ringRadius, cabinRadius, color, shaftAngles, cableAngles, cabinFaceOut) {
+  const group = new THREE.Group();
+  group.userData = { shaftRadius, ringRadius, cabinRadius, shaftAngles, cableAngles, cabinFaceOut };
+
+  // Guide sleeve ring
+  const sleeveGeo = new THREE.TorusGeometry(shaftRadius + 0.3, 0.15, 8, 48);
+  const sleeveMat = new THREE.MeshStandardMaterial({color, roughness:0.3, metalness:0.6, emissive:color, emissiveIntensity:0.1});
+  const sleeve = new THREE.Mesh(sleeveGeo, sleeveMat);
+  sleeve.rotation.x = -Math.PI/2;
+  group.add(sleeve);
+
+  // Linear bearing housings at shaft positions
+  shaftAngles.forEach(angle => {
+    const bx = shaftRadius * Math.cos(angle);
+    const bz = shaftRadius * Math.sin(angle);
+    const bearingGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.6, 12);
+    const bearing = new THREE.Mesh(bearingGeo, sleeveMat);
+    bearing.position.set(bx, 0, bz);
+    group.add(bearing);
+  });
+
+  // Slewing bearing ring
+  const bearingGeo = new THREE.TorusGeometry(shaftRadius + 0.1, 0.12, 8, 48);
+  const bearingMat = new THREE.MeshStandardMaterial({color:0x667788, roughness:0.2, metalness:0.8});
+  const sBearing = new THREE.Mesh(bearingGeo, bearingMat);
+  sBearing.rotation.x = -Math.PI/2;
+  sBearing.position.y = -0.4;
+  group.add(sBearing);
+
+  // Ring truss (circular)
+  const trussGeo = new THREE.TorusGeometry(ringRadius, 0.25, 12, 64);
+  const trussMat = new THREE.MeshStandardMaterial({color, roughness:0.4, metalness:0.5, emissive:color, emissiveIntensity:0.08});
+  const truss = new THREE.Mesh(trussGeo, trussMat);
+  truss.rotation.x = -Math.PI/2;
+  truss.position.y = -1.0;
+  group.add(truss);
+
+  // Truss inner ring for stiffness
+  const trussInnerGeo = new THREE.TorusGeometry(ringRadius - 0.8, 0.12, 8, 64);
+  const trussInner = new THREE.Mesh(trussInnerGeo, trussMat.clone());
+  trussInner.rotation.x = -Math.PI/2;
+  trussInner.position.y = -1.0;
+  group.add(trussInner);
+
+  // Radial struts
+  for (let i = 0; i < 16; i++) {
+    const a = i * Math.PI/8;
+    const cx = ringRadius * Math.cos(a);
+    const cz = ringRadius * Math.sin(a);
+    const ix = (ringRadius - 0.8) * Math.cos(a);
+    const iz = (ringRadius - 0.8) * Math.sin(a);
+    const dx = cx - ix, dz = cz - iz;
+    const len = Math.sqrt(dx*dx + dz*dz);
+    const strutGeo = new THREE.CylinderGeometry(0.06, 0.06, len, 6);
+    const strut = new THREE.Mesh(strutGeo, trussMat);
+    strut.position.set((cx+ix)/2, -1.0, (cz+iz)/2);
+    strut.rotation.z = Math.PI/2;
+    strut.rotation.y = Math.atan2(dz, dx);
+    group.add(strut);
+  }
+
+  // Cantilever arms + capsules
+  for (let i = 0; i < 10; i++) {
+    const a = i * Math.PI * 2 / 10;
+    const tx = ringRadius * Math.cos(a);
+    const tz = ringRadius * Math.sin(a);
+    const cx = cabinRadius * Math.cos(a);
+    const cz = cabinRadius * Math.sin(a);
+
+    // Cantilever
+    const dx = cx - tx, dz = cz - tz;
+    const len = Math.sqrt(dx*dx + dz*dz);
+    const armGeo = new THREE.CylinderGeometry(0.08, 0.08, len, 8);
+    const armMat = new THREE.MeshStandardMaterial({color, roughness:0.4, metalness:0.6});
+    const arm = new THREE.Mesh(armGeo, armMat);
+    arm.position.set((tx+cx)/2, -1.0, (tz+cz)/2);
+    arm.rotation.z = Math.PI/2;
+    arm.rotation.y = Math.atan2(dz, dx);
+    group.add(arm);
+
+    // Cabin
+    const cabinGroup = new THREE.Group();
+    const cabinGeo = new THREE.BoxGeometry(1.0, 0.5, 2.2);
+    const cabinMat = new THREE.MeshStandardMaterial({
+      color: color === 0xff4444 ? 0x4a1515 : 0x1a3a5c,
+      roughness: 0.5,
+      metalness: 0.4
+    });
+    const cabin = new THREE.Mesh(cabinGeo, cabinMat);
+    cabinGroup.add(cabin);
+    // Glass floor
+    const glassGeo = new THREE.BoxGeometry(0.8, 0.05, 1.8);
+    const glassMat = new THREE.MeshStandardMaterial({color:0x4488aa, roughness:0.1, metalness:0.1, opacity:0.4, transparent:true});
+    const glass = new THREE.Mesh(glassGeo, glassMat);
+    glass.position.y = -0.27;
+    cabinGroup.add(glass);
+
+    cabinGroup.position.set(cx, -1.0, cz);
+    // Cabin faces outward (for inner ring) or inward (for outer ring)
+    const faceAngle = cabinFaceOut ? a : a + Math.PI;
+    cabinGroup.rotation.y = faceAngle;
+    group.add(cabinGroup);
+  }
+
+  // Cable attachment points
+  cableAngles.forEach(angle => {
+    const cx = (shaftRadius + 0.5) * Math.cos(angle);
+    const cz = (shaftRadius + 0.5) * Math.sin(angle);
+    const eyeGeo = new THREE.TorusGeometry(0.15, 0.04, 8, 8);
+    const eye = new THREE.Mesh(eyeGeo, new THREE.MeshStandardMaterial({color:0xd29922, roughness:0.2, metalness:0.9}));
+    eye.position.set(cx, 0.3, cz);
+    group.add(eye);
+  });
+
+  return group;
+}
+
+// Inner ring (red): shafts at r=3.5, truss at r=4.5, cabins at r=6.0, face outward
+const innerShaftAngles = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
+const innerCableAngles = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
+const innerRing = createRingAssembly(3.5, 4.5, 6.0, 0xff4444, innerShaftAngles, innerCableAngles, true);
+
+// Outer ring (blue): shafts at r=9.5, truss at r=8.75, cabins at r=8.0, face inward
+const outerShaftAngles = [Math.PI/4, 3*Math.PI/4, 5*Math.PI/4, 7*Math.PI/4];
+const outerCableAngles = [Math.PI/4, 3*Math.PI/4, 5*Math.PI/4, 7*Math.PI/4];
+const outerRing = createRingAssembly(9.5, 8.75, 8.0, 0x3388ee, outerShaftAngles, outerCableAngles, false);
+
+// Set initial heights
+innerRing.position.y = 22;
+outerRing.position.y = 15;
+scene.add(innerRing);
+scene.add(outerRing);
+
+// ============ CABLES (vertical) ============
+function createCables(ring, cableAngles, color) {
+  const cables = [];
+  cableAngles.forEach(angle => {
+    const x = (ring.userData.shaftRadius + 0.5) * Math.cos(angle);
+    const z = (ring.userData.shaftRadius + 0.5) * Math.sin(angle);
+    cables.push({ x, z, angle });
+  });
+  ring.userData.cableOffsets = cables;
+}
+
+createCables(innerRing, innerCableAngles, 0xff6b6b);
+createCables(outerRing, outerCableAngles, 0x4da6ff);
+
+// Dynamic cable lines
+const cableLines = new THREE.Group();
+scene.add(cableLines);
+
+// ============ ANIMATION ============
+const RPM = 3;
+const omega = RPM * 2 * Math.PI / 60; // rad/s
+
+let time = 0;
+
+function animate(timestamp) {
+  requestAnimationFrame(animate);
+
+  const dt = Math.min(timestamp - (animate.lastTime || timestamp), 0.1) / 1000;
+  animate.lastTime = timestamp;
+  time += dt;
+
+  // Rotation at 3rpm
+  const angleRed = omega * time;
+  const angleBlue = -omega * time;
+
+  innerRing.rotation.y = angleRed;
+  outerRing.rotation.y = angleBlue;
+
+  // Sinusoidal vertical motion
+  const zRed = 22 + 8 * Math.sin(time * 0.4 + Math.PI/2);
+  const zBlue = 15 + 8 * Math.sin(time * 0.4 - Math.PI/2);
+
+  innerRing.position.y = zRed;
+  outerRing.position.y = zBlue;
+
+  // Update cables
+  cableLines.clear();
+  [innerRing, outerRing].forEach((ring, idx) => {
+    const color = idx === 0 ? 0xff6b6b : 0x4da6ff;
+    const cables = ring.userData.cableOffsets || [];
+    cables.forEach(c => {
+      const worldX = c.x * Math.cos(ring.rotation.y) - c.z * Math.sin(ring.rotation.y);
+      const worldZ = c.x * Math.sin(ring.rotation.y) + c.z * Math.cos(ring.rotation.y);
+      const points = [
+        new THREE.Vector3(worldX, TOWER_H, worldZ),
+        new THREE.Vector3(worldX, ring.position.y + 0.3, worldZ)
+      ];
+      const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+      const lineMat = new THREE.LineBasicMaterial({color, transparent:true, opacity:0.4, linewidth:1});
+      cableLines.add(new THREE.Line(lineGeo, lineMat));
+    });
+  });
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+requestAnimationFrame(animate);
+
+// Handle resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
