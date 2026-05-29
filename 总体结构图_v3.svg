@@ -12,7 +12,7 @@
   <line x1="0" y1="885" x2="1400" y2="885" stroke="#30363d" stroke-width="2"/>
   <rect x="0" y="885" width="1400" height="115" fill="#0d1117"/>
 
-  <text x="700" y="32" text-anchor="middle" fill="#e6edf3" font-size="20" font-weight="bold">天袭中队 — 总体结构图 v3</text>
+  <text x="700" y="32" text-anchor="middle" fill="#e6edf3" font-size="20" font-weight="bold">谁与争锋 — 总体结构图 v3</text>
   <text x="700" y="52" text-anchor="middle" fill="#8b949e" font-size="12">顶部大圆盘 + 8根光轴导向 + 齿轮旋转 + 垂直缆绳 | 塔高50m · 同心双环 · 3rpm</text>
 
   <!-- ============ LEFT: ELEVATION ============ -->
