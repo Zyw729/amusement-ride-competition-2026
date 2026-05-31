@@ -1,0 +1,16 @@
+# 临时文件
+~$*.doc
+~$*.docx
+~$*.ppt
+~$*.pptx
+*.tmp
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# 大文件 (>100MB 不上传)
+*.mp4
+*.avi
+*.mov
