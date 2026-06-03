@@ -5,44 +5,158 @@
 <title>谁与争锋 — 3D运动演示</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0f18;overflow:hidden;font-family:Arial,sans-serif}
+body{background:#0a0f18;overflow:hidden;font-family:'Microsoft YaHei',Arial,sans-serif}
+/* ── HUD ── */
 #hud{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#161b22e8;border:1px solid #30363d;border-radius:10px;padding:12px 24px;text-align:center;z-index:10;pointer-events:none}
 #hud h1{font-size:16px;color:#e6edf3;margin:0 0 4px}
 #hud .detail{font-size:10px;color:#8b949e}
 .red{color:#ff6b6b}.blue{color:#4da6ff}
 #legend{position:fixed;bottom:48px;left:50%;transform:translateX(-50%);background:#161b22e8;border:1px solid #30363d;border-radius:8px;padding:6px 18px;font-size:11px;z-index:10;display:flex;gap:20px;pointer-events:none}
 #help{position:fixed;top:12px;right:16px;color:#484f5a;font-size:10px;pointer-events:none}
-/* Timeline bar */
-#timeline{position:fixed;bottom:12px;left:16px;right:16px;z-index:20;display:flex;align-items:center;gap:10px;background:#161b22e8;border:1px solid #30363d;border-radius:8px;padding:8px 16px}
+
+/* ── Left Panel ── */
+#leftPanel{position:fixed;left:8px;top:8px;bottom:62px;width:272px;background:#161b22e8;border:1px solid #30363d;border-radius:10px;z-index:25;overflow-y:auto;overflow-x:hidden;padding:10px 12px;font-size:11px;color:#c9d1d9;scrollbar-width:thin;scrollbar-color:#30363d transparent}
+#leftPanel::-webkit-scrollbar{width:5px}
+#leftPanel::-webkit-scrollbar-thumb{background:#30363d;border-radius:3px}
+#leftPanel h3{font-size:12px;color:#e6edf3;margin:8px 0 6px;padding-bottom:4px;border-bottom:1px solid #30363d;display:flex;align-items:center;gap:6px}
+#leftPanel h3:first-child{margin-top:0}
+
+/* Monitor data */
+.monitor-box{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:8px 10px;margin-bottom:4px}
+.monitor-box .title{font-size:11px;font-weight:bold;margin-bottom:4px}
+.monitor-box .title.red{color:#ff6b6b}.monitor-box .title.blue{color:#4da6ff}
+.monitor-row{display:flex;justify-content:space-between;padding:2px 0;font-size:10px}
+.monitor-row .lbl{color:#8b949e}
+.monitor-row .val{color:#e6edf3;font-weight:bold}
+.monitor-row .val.ready{color:#3fb950}
+.monitor-row .val.active{color:#d29922}
+.monitor-row .val.danger{color:#ff4444}
+
+/* Cabin select buttons */
+.cabin-select{margin:4px 0 6px}
+.cabin-select .ring-label{font-size:9px;color:#8b949e;margin-bottom:2px}
+.cabin-btn-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;margin-bottom:4px}
+.cabin-btn{width:100%;aspect-ratio:1;min-width:20px;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:8px;font-weight:bold;color:#8b949e;background:#0d1117;transition:all .15s}
+.cabin-btn:hover{border-color:#8b949e;color:#e6edf3}
+.cabin-btn.red-ring{background:#3a1010;border-color:#ff444444;color:#ff8888}
+.cabin-btn.blue-ring{background:#102040;border-color:#3388ff44;color:#88aaff}
+.cabin-btn.active{border-color:#fff!important;box-shadow:0 0 8px currentColor;transform:scale(1.08);z-index:2;color:#fff!important}
+
+/* Toggle buttons */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:10px}
+.toggle-row .tgl-label{color:#8b949e}
+.toggle-btn{padding:2px 8px;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:9px;min-width:40px;text-align:center;transition:all .15s;background:#0d1117;color:#8b949e}
+.toggle-btn:hover{border-color:#8b949e}
+.toggle-btn.on{background:#1a3a2a;border-color:#3fb950;color:#3fb950}
+.toggle-btn.off{background:#3a1a1a;border-color:#f85149;color:#f85149}
+
+/* Control buttons */
+.ctrl-row{display:flex;gap:4px;flex-wrap:wrap}
+.ctrl-btn{flex:1;min-width:55px;padding:6px 4px;border:1px solid #30363d;border-radius:5px;cursor:pointer;font-size:10px;font-weight:bold;text-align:center;transition:all .15s;background:#0d1117;color:#c9d1d9}
+.ctrl-btn:hover{filter:brightness(1.3)}
+.ctrl-btn.estop{background:#cc2222;border-color:#ff4444;color:#fff;font-size:12px}
+.ctrl-btn.start{background:#1a6b30;border-color:#3fb950;color:#fff}
+.ctrl-btn.accel{background:#5c4a10;border-color:#d29922;color:#d29922}
+.ctrl-btn.decel{background:#102048;border-color:#4da6ff;color:#4da6ff}
+.ctrl-btn.estop-active{background:#880000;box-shadow:0 0 12px #ff0000;animation:pulse 0.5s infinite alternate}
+@keyframes pulse{from{box-shadow:0 0 8px #ff0000}to{box-shadow:0 0 20px #ff4444}}
+
+/* View buttons */
+.view-row{display:flex;gap:3px}
+.view-btn{flex:1;padding:4px 2px;border:1px solid #30363d;border-radius:4px;cursor:pointer;font-size:9px;text-align:center;transition:all .15s;background:#0d1117;color:#8b949e}
+.view-btn:hover{border-color:#8b949e;color:#e6edf3}
+.view-btn.active{background:#3d2e00;border-color:#d29922;color:#d29922;font-weight:bold}
+
+/* E-stop overlay flash */
+#estopOverlay{position:fixed;inset:0;background:#ff000008;z-index:15;pointer-events:none;display:none;border:4px solid transparent;transition:border-color .3s}
+#estopOverlay.active{display:block;border-color:#ff000066;animation:pulseOverlay 1s infinite alternate}
+@keyframes pulseOverlay{from{border-color:#ff000044}to{border-color:#ff0000aa}}
+
+/* PiP cockpit views */
+.pip{position:fixed;width:260px;height:200px;border:2px solid #30363d;border-radius:8px;z-index:5;pointer-events:none;right:16px}
+#pipInner{bottom:340px}#pipOuter{bottom:120px}
+.pip .label{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:10px;color:#e6edf3;background:#161b22c0;padding:1px 8px;border-radius:3px}
+.js{position:absolute;width:56px;height:56px;border-radius:50%;background:#ffffff10;border:2px solid #ffffff30;bottom:8px;cursor:grab;z-index:6;touch-action:none;pointer-events:auto}
+.js .knob{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffffff60;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.js:active{cursor:grabbing}
+.js.inner{right:8px}.js.outer{right:8px}
+.eye{position:absolute;width:32px;height:32px;border-radius:50%;background:#ffffff10;border:2px solid #ffffff30;top:8px;right:8px;cursor:grab;z-index:6;display:flex;align-items:center;justify-content:center;touch-action:none}
+.eye::after{content:'';width:10px;height:10px;border-radius:50%;background:#fffa;pointer-events:none}
+.eye{pointer-events:auto}
+.eye:active{cursor:grabbing}
+.eye.inner{right:8px}.eye.outer{right:8px}
+.pip-hud{position:absolute;bottom:58px;left:8px;right:72px;font-size:8px;color:#8b949e;pointer-events:none;line-height:1.3}
+.pip-hud span{color:#e6edf3}
+
+/* Timeline */
+#timeline{position:fixed;bottom:12px;left:292px;right:16px;z-index:20;display:flex;align-items:center;gap:10px;background:#161b22e8;border:1px solid #30363d;border-radius:8px;padding:8px 16px}
 #timeline input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:#30363d;outline:none;cursor:pointer}
 #timeline input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#d29922;cursor:pointer;border:2px solid #0d1117}
 #timeline .tlabel{color:#8b949e;font-size:10px;min-width:50px;text-align:center}
 #timeline button{background:#252a33;color:#8b949e;border:1px solid #30363d;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:10px}
 #timeline button:hover{background:#30363d;color:#e6edf3}
 #timeline button.active{background:#d29922;color:#0d1117;border-color:#d29922;font-weight:bold}
-.seg{display:inline-block;height:12px;border-radius:2px;position:absolute;top:-3px}
-/* PiP cockpit views — transparent overlays; video from scissor render on main canvas */
-.pip{position:fixed;width:260px;height:200px;border:2px solid #30363d;border-radius:8px;z-index:5;pointer-events:none;right:16px}
-#pipInner{bottom:340px}
-#pipOuter{bottom:120px}
-.pip .label{position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:10px;color:#e6edf3;background:#161b22c0;padding:1px 8px;border-radius:3px}
-/* Joystick overlay on PiP */
-.js{position:absolute;width:56px;height:56px;border-radius:50%;background:#ffffff10;border:2px solid #ffffff30;bottom:8px;cursor:grab;z-index:6;touch-action:none;pointer-events:auto}
-.js .knob{position:absolute;width:20px;height:20px;border-radius:50%;background:#ffffff60;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
-.js:active{cursor:grabbing}
-.js.inner{right:8px}.js.outer{right:8px}
-/* Eye control on PiP */
-.eye{position:absolute;width:32px;height:32px;border-radius:50%;background:#ffffff10;border:2px solid #ffffff30;top:8px;right:8px;cursor:grab;z-index:6;display:flex;align-items:center;justify-content:center;touch-action:none}
-.eye::after{content:'';width:10px;height:10px;border-radius:50%;background:#fffa;pointer-events:none}
-.eye{pointer-events:auto}
-.eye:active{cursor:grabbing}
-.eye.inner{right:8px}.eye.outer{right:8px}
-/* HUD labels on PiP */
-.pip-hud{position:absolute;bottom:58px;left:8px;right:72px;font-size:8px;color:#8b949e;pointer-events:none;line-height:1.3}
-.pip-hud span{color:#e6edf3}
+
+/* Responsive: hide left panel on narrow screens */
+@media(max-width:900px){#leftPanel{width:220px;font-size:10px}#timeline{left:236px}}
 </style>
 </head>
 <body>
+
+<!-- ════ E-Stop Overlay ════ -->
+<div id="estopOverlay"></div>
+
+<!-- ════ Left Panel ════ -->
+<div id="leftPanel">
+  <!-- Section 1: Cabin Monitor -->
+  <h3>📊 舱体监视</h3>
+  <div class="monitor-box" id="monitorBox">
+    <div class="title red" id="monTitle">🔴 红环 舱体 #1</div>
+    <div class="monitor-row"><span class="lbl">射手位</span><span class="val ready" id="monShooter">待命</span></div>
+    <div class="monitor-row"><span class="lbl">驾驶位</span><span class="val ready" id="monDriver">待命</span></div>
+    <div class="monitor-row"><span class="lbl">俯仰角</span><span class="val" id="monPitch">0°</span></div>
+    <div class="monitor-row"><span class="lbl">偏航角</span><span class="val" id="monYaw">0°</span></div>
+    <div class="monitor-row"><span class="lbl">高度</span><span class="val" id="monHeight">5m</span></div>
+    <canvas id="cabinViewCanvas" width="256" height="160" style="width:100%;border-radius:4px;margin-top:4px;background:#0d1117"></canvas>
+  </div>
+  <div class="cabin-select">
+    <div class="ring-label">🔴 红环 (内环)</div>
+    <div class="cabin-btn-grid" id="redBtns"></div>
+    <div class="ring-label" style="margin-top:3px">🔵 蓝环 (外环)</div>
+    <div class="cabin-btn-grid" id="blueBtns"></div>
+  </div>
+
+  <!-- Section 2: Visibility Toggles -->
+  <h3>👁 部件显隐</h3>
+  <div id="toggleContainer"></div>
+
+  <!-- Section 3: Run Controls -->
+  <h3>🎮 运行控制</h3>
+  <div class="ctrl-row">
+    <button class="ctrl-btn estop" id="btnEStop" title="紧急停止">🛑 急停</button>
+    <button class="ctrl-btn start" id="btnStart" title="启动/恢复">▶ 启动</button>
+  </div>
+  <div class="ctrl-row" style="margin-top:4px">
+    <button class="ctrl-btn accel" id="btnAccel" title="加速">⚡ 加速</button>
+    <button class="ctrl-btn decel" id="btnDecel" title="减速">🐢 减速</button>
+  </div>
+  <div class="monitor-row" style="margin-top:4px;font-size:10px"><span class="lbl">当前倍速</span><span class="val" id="speedLabel">1×</span></div>
+
+  <!-- Section 4: View Angles -->
+  <h3>📷 观察角度</h3>
+  <div class="view-row" id="viewBtns">
+    <button class="view-btn" data-mode="track">🎯 追踪</button>
+    <button class="view-btn" data-mode="top">🔽 俯视</button>
+    <button class="view-btn" data-mode="front">🪟 正视</button>
+    <button class="view-btn active" data-mode="free">🖱 自由</button>
+  </div>
+  <div class="view-row" style="margin-top:3px" id="trackTeamBtns">
+    <button class="view-btn active" data-team="red" style="color:#ff6b6b">🔴 追踪红队</button>
+    <button class="view-btn" data-team="blue" style="color:#4da6ff">🔵 追踪蓝队</button>
+  </div>
+</div>
+
+<!-- ════ HUD ════ -->
 <div id="hud">
   <h1>谁与争锋 — 3D运动演示</h1>
   <div id="phaseText" style="font-size:13px;margin:2px 0;color:#8b949e">● 上下客 — 两环在站台静止</div>
@@ -54,15 +168,27 @@ body{background:#0a0f18;overflow:hidden;font-family:Arial,sans-serif}
   <span class="blue">■ 外环(蓝)↺φ16m</span>
   <span style="color:#8b949e">■ 光轴</span>
   <span style="color:#d29922">■ 钢缆</span>
-  <span style="color:#667788">■ 大圆盘</span>
+  <span style="color:#667788">■ 双层圆盘</span>
 </div>
 <div id="help">🖱 旋转/缩放/平移 &nbsp;|&nbsp; 拖动底部进度条 &nbsp;|&nbsp; 键1-5倍速 &nbsp;|&nbsp; 空格暂停</div>
+
+<!-- ════ Timeline ════ -->
 <div id="timeline">
   <button id="btnPlay" style="width:36px">▶</button>
   <span class="tlabel" id="tCurrent">0:00</span>
   <div style="position:relative;flex:1">
     <input type="range" id="seekBar" min="0" max="1000" value="0" step="1">
-<!-- PiP cockpit views -->
+    <div id="segOverlay" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;display:flex;padding:0 7px"></div>
+  </div>
+  <span class="tlabel" id="tTotal">2:55</span>
+  <button id="btn0_5x">0.5×</button>
+  <button id="btn1x" class="active">1×</button>
+  <button id="btn2x">2×</button>
+  <button id="btn4x">4×</button>
+  <button id="btn8x">8×</button>
+</div>
+
+<!-- ════ PiP Cockpit Views ════ -->
 <div class="pip" id="pipInner"><span class="label" style="color:#ff6b6b">🔴 红队驾驶舱</span>
   <div class="pip-hud"><span id="pipIRpm">0</span>rpm | 俯仰<span id="pipIPitch">0</span>° | 偏航<span id="pipIYaw">0</span>°</div>
   <div class="eye inner" id="eyeInner" title="拖拽旋转视角"></div>
@@ -72,15 +198,6 @@ body{background:#0a0f18;overflow:hidden;font-family:Arial,sans-serif}
   <div class="pip-hud"><span id="pipORpm">0</span>rpm | 俯仰<span id="pipOPitch">0</span>° | 偏航<span id="pipOYaw">0</span>°</div>
   <div class="eye outer" id="eyeOuter" title="拖拽旋转视角"></div>
   <div class="js outer" id="jsOuter"><div class="knob"></div></div>
-</div>
-    <div id="segOverlay" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;display:flex;padding:0 7px"></div>
-  </div>
-  <span class="tlabel" id="tTotal">2:55</span>
-  <button id="btn0_5x">0.5×</button>
-  <button id="btn1x" class="active">1×</button>
-  <button id="btn2x">2×</button>
-  <button id="btn4x">4×</button>
-  <button id="btn8x">8×</button>
 </div>
 
 <script type="importmap">
@@ -94,6 +211,9 @@ body{background:#0a0f18;overflow:hidden;font-family:Arial,sans-serif}
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// ═══════════════════════════════════════════
+// SCENE SETUP
+// ═══════════════════════════════════════════
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0d1117);
 scene.fog = new THREE.Fog(0x0d1117, 60, 200);
@@ -135,18 +255,23 @@ const ground = new THREE.Mesh(gGeo,gMat);
 ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
 scene.add(new THREE.PolarGridHelper(11.5,32,16,128,0x30363d,0x252a33));
 
-// Foundation ring
+// ═══════════════════════════════════════════
+// FOUNDATION GROUP
+// ═══════════════════════════════════════════
+const foundationGroup = new THREE.Group();
 const fGeo = new THREE.TorusGeometry(10.8,0.5,12,72);
 const found = new THREE.Mesh(fGeo,new THREE.MeshStandardMaterial({color:0x2a3040,roughness:0.6,metalness:0.3}));
 found.rotation.x=-Math.PI/2; found.position.y=0.12; found.receiveShadow=true;
-scene.add(found);
+foundationGroup.add(found);
 
-// Foundation pads
 const R_inner=3.5, R_outer=9.5;
-function addPad(a,r){const x=r*Math.cos(a),z=r*Math.sin(a);const p=new THREE.Mesh(new THREE.CylinderGeometry(.3,.5,.5,16),new THREE.MeshStandardMaterial({color:0x3a4454,roughness:.5,metalness:.4}));p.position.set(x,.2,z);p.receiveShadow=true;scene.add(p)}
+function addPad(a,r){const x=r*Math.cos(a),z=r*Math.sin(a);const p=new THREE.Mesh(new THREE.CylinderGeometry(.3,.5,.5,16),new THREE.MeshStandardMaterial({color:0x3a4454,roughness:.5,metalness:.4}));p.position.set(x,.2,z);p.receiveShadow=true;foundationGroup.add(p)}
 for(let i=0;i<4;i++){addPad(i*Math.PI/2,R_inner);addPad(i*Math.PI/2+Math.PI/4,R_outer)}
+scene.add(foundationGroup);
 
-// ============ TOWER ============
+// ═══════════════════════════════════════════
+// TOWER
+// ═══════════════════════════════════════════
 const TH=50, TH_HALF=1.5;
 const towerGroup = new THREE.Group();
 function col(x,z){const g=new THREE.CylinderGeometry(.31,.31,TH,16);const c=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x586478,roughness:.4,metalness:.6}));c.position.set(x,TH/2,z);c.castShadow=true;return c}
@@ -155,138 +280,330 @@ towerGroup.add(col(-TH_HALF,-TH_HALF));towerGroup.add(col(TH_HALF,-TH_HALF));tow
 for(let y=3;y<TH;y+=3){towerGroup.add(br(-TH_HALF,-TH_HALF,TH_HALF,-TH_HALF,y));towerGroup.add(br(TH_HALF,-TH_HALF,TH_HALF,TH_HALF,y));towerGroup.add(br(TH_HALF,TH_HALF,-TH_HALF,TH_HALF,y));towerGroup.add(br(-TH_HALF,TH_HALF,-TH_HALF,-TH_HALF,y));if(Math.floor(y/3)%2===0){towerGroup.add(br(-TH_HALF,-TH_HALF,TH_HALF,TH_HALF,y));towerGroup.add(br(TH_HALF,-TH_HALF,-TH_HALF,TH_HALF,y))}else{towerGroup.add(br(-TH_HALF,TH_HALF,TH_HALF,-TH_HALF,y));towerGroup.add(br(TH_HALF,TH_HALF,-TH_HALF,-TH_HALF,y))}}
 scene.add(towerGroup);
 
-// ============ TOP DISC (SOLID PLATE) ============
+// ═══════════════════════════════════════════
+// TOP DISC
+// ═══════════════════════════════════════════
 const discGroup = new THREE.Group(); discGroup.position.y=TH;
 const discGeo = new THREE.CylinderGeometry(10.2,10.2,1.5,72);
 const dMat = new THREE.MeshStandardMaterial({color:0x5a6a7a,roughness:.35,metalness:.65});
 const disc = new THREE.Mesh(discGeo,dMat);
 disc.castShadow=true;disc.receiveShadow=true;discGroup.add(disc);
-
-// Disc bottom rib
 discGroup.add(new THREE.Mesh(new THREE.TorusGeometry(8.5,.3,12,64),new THREE.MeshStandardMaterial({color:0x4a5a6a,roughness:.4,metalness:.6})).rotateX(-Math.PI/2).translateY(-.7));
-
-// Top surface plate
 discGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(10.0,10.2,.08,64),new THREE.MeshStandardMaterial({color:0x6a7a8a,roughness:.25,metalness:.7})).translateY(.7));
-
-// Annular groove
 discGroup.add(new THREE.Mesh(new THREE.TorusGeometry(5.5,.5,12,64),new THREE.MeshStandardMaterial({color:0x3a4a5a,roughness:.4,metalness:.5})).rotateX(-Math.PI/2).translateY(.7));
-
-// Shaft anchors
 function addAnchor(a,r){const x=r*Math.cos(a),z=r*Math.sin(a);[1,-1].forEach(s=>{const b=new THREE.Mesh(new THREE.CylinderGeometry(.35,.3,.35,16),new THREE.MeshStandardMaterial({color:0x7a8a9a,roughness:.25,metalness:.7}));b.position.set(x,s*.85,z);discGroup.add(b)})}
 for(let i=0;i<4;i++){addAnchor(i*Math.PI/2,R_inner);addAnchor(i*Math.PI/2+Math.PI/4,R_outer)}
 
-// ============ HOISTING MECHANISM (detailed) ============
 function addHoistUnit(angle,radius,color){
   const x=radius*Math.cos(angle),z=radius*Math.sin(angle);
   const g=new THREE.Group();
   g.position.set(x,0.9,z);
   g.rotation.y=-angle;
-
-  // Base plate
   g.add(new THREE.Mesh(new THREE.BoxGeometry(.8,.08,1.2),new THREE.MeshStandardMaterial({color:0x667788,roughness:.3,metalness:.7})));
-
-  // Motor housing (AC motor, cylindrical)
   const motorGeo = new THREE.CylinderGeometry(.22,.22,.6,16);
   const motor = new THREE.Mesh(motorGeo,new THREE.MeshStandardMaterial({color:0x445566,roughness:.3,metalness:.7}));
   motor.position.set(-.25,.35,0); motor.rotation.z=Math.PI/2;
   g.add(motor);
-
-  // Motor cooling fins
-  for(let i=0;i<4;i++){
-    const fin=new THREE.Mesh(new THREE.TorusGeometry(.24,.015,8,16),new THREE.MeshStandardMaterial({color:0x3a4a5a,roughness:.3,metalness:.6}));
-    fin.position.set(-.15+i*.1,.35,0);fin.rotation.y=Math.PI/2;
-    g.add(fin);
-  }
-
-  // Gearbox housing
+  for(let i=0;i<4;i++){const fin=new THREE.Mesh(new THREE.TorusGeometry(.24,.015,8,16),new THREE.MeshStandardMaterial({color:0x3a4a5a,roughness:.3,metalness:.6}));fin.position.set(-.15+i*.1,.35,0);fin.rotation.y=Math.PI/2;g.add(fin);}
   g.add(new THREE.Mesh(new THREE.BoxGeometry(.3,.25,.45),new THREE.MeshStandardMaterial({color:0x4a5a6a,roughness:.35,metalness:.7})).translateX(.05).translateY(.3));
-
-  // Brake disc on motor shaft
   g.add(new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,.04,24),new THREE.MeshStandardMaterial({color:0x556677,roughness:.2,metalness:.8})).rotateZ(Math.PI/2).translateX(-.05).translateY(.35));
-
-  // Cable drum
   const drumGeo = new THREE.CylinderGeometry(.18,.18,.55,24);
   const drum = new THREE.Mesh(drumGeo,new THREE.MeshStandardMaterial({color:0x667788,roughness:.2,metalness:.8}));
   drum.rotation.z=Math.PI/2; drum.position.set(.2,.35,0);
   g.add(drum);
-
-  // Drum cable grooves (helical lines)
   const grooveMat = new THREE.MeshBasicMaterial({color:0x556070});
-  for(let i=0;i<12;i++){
-    const t=i/12*Math.PI*2;
-    const r=new THREE.Mesh(new THREE.TorusGeometry(.185,.008,4,16),grooveMat);
-    r.position.set(.2+.55*(i/12-.25),.35,0);r.rotation.y=Math.PI/2;
-    g.add(r);
-  }
-
-  // Drum flanges
-  [-.27, .27].forEach(off => {
-    const flange = new THREE.Mesh(new THREE.TorusGeometry(.2, .03, 8, 24), new THREE.MeshStandardMaterial({ color: 0x556677, roughness: .2, metalness: .8 }));
-    flange.rotation.y = Math.PI / 2;
-    flange.position.set(.2 + off, .35, 0);
-    g.add(flange);
-  });
-
-  // ===== SHEAVE WHEEL (top pulley) =====
+  for(let i=0;i<12;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(.185,.008,4,16),grooveMat);r.position.set(.2+.55*(i/12-.25),.35,0);r.rotation.y=Math.PI/2;g.add(r);}
+  [-.27, .27].forEach(off => {const flange = new THREE.Mesh(new THREE.TorusGeometry(.2, .03, 8, 24), new THREE.MeshStandardMaterial({ color: 0x556677, roughness: .2, metalness: .8 }));flange.rotation.y = Math.PI / 2;flange.position.set(.2 + off, .35, 0);g.add(flange);});
   const sheaveGroup = new THREE.Group();
   sheaveGroup.position.set(.2, 0, 0);
-
-  // Sheave bearing pedestal
   const ped = new THREE.Mesh(new THREE.BoxGeometry(.15, .35, .4), new THREE.MeshStandardMaterial({ color: 0x6a7a8a, roughness: .3, metalness: .7 }));
-  ped.position.y = .7;
-  sheaveGroup.add(ped);
-
-  // Sheave wheel
+  ped.position.y = .7; sheaveGroup.add(ped);
   const sheave = new THREE.Mesh(new THREE.TorusGeometry(.28, .06, 16, 48), new THREE.MeshStandardMaterial({ color: 0x8899aa, roughness: .15, metalness: .9 }));
-  sheave.rotation.y = Math.PI / 2;
-  sheave.position.y = .9;
-  sheaveGroup.add(sheave);
-
-  // Sheave hub (cylinder lying flat = horizontal)
+  sheave.rotation.y = Math.PI / 2; sheave.position.y = .9; sheaveGroup.add(sheave);
   const hub = new THREE.Mesh(new THREE.CylinderGeometry(.1, .1, .12, 16), new THREE.MeshStandardMaterial({ color: 0x778899, roughness: .15, metalness: .8 }));
-  hub.rotation.z = Math.PI / 2;
-  hub.position.y = .9;
-  sheaveGroup.add(hub);
-
-  // Cable groove ring
+  hub.rotation.z = Math.PI / 2; hub.position.y = .9; sheaveGroup.add(hub);
   const grv = new THREE.Mesh(new THREE.TorusGeometry(.28, .02, 8, 48), new THREE.MeshBasicMaterial({ color: 0x445566 }));
-  grv.rotation.y = Math.PI / 2;
-  grv.position.y = .9;
-  sheaveGroup.add(grv);
-
-  // Fairlead
+  grv.rotation.y = Math.PI / 2; grv.position.y = .9; sheaveGroup.add(grv);
   const fair = new THREE.Mesh(new THREE.TorusGeometry(.06, .03, 8, 24), new THREE.MeshStandardMaterial({ color: 0x8a9aaa, roughness: .15, metalness: .8 }));
-  fair.rotation.y = Math.PI / 2;
-  fair.position.y = 1.05;
-  sheaveGroup.add(fair);
-
+  fair.rotation.y = Math.PI / 2; fair.position.y = 1.05; sheaveGroup.add(fair);
   g.add(sheaveGroup);
   return g;
 }
-
 const motAngI=[Math.PI/8,5*Math.PI/8,9*Math.PI/8,13*Math.PI/8];
 const motAngO=[Math.PI/4,3*Math.PI/4,5*Math.PI/4,7*Math.PI/4];
-for(let i=0;i<4;i++){
-  discGroup.add(addHoistUnit(motAngI[i],R_inner+.5,0xff6b6b));
-  discGroup.add(addHoistUnit(motAngO[i],R_outer-.5,0x4da6ff));
-}
-
+for(let i=0;i<4;i++){discGroup.add(addHoistUnit(motAngI[i],R_inner+.5,0xff6b6b));discGroup.add(addHoistUnit(motAngO[i],R_outer-.5,0x4da6ff));}
 scene.add(discGroup);
 
-// ============ GUIDE SHAFTS ============
+// ═══════════════════════════════════════════
+// GUIDE SHAFTS
+// ═══════════════════════════════════════════
 function mkShaft(a,r,d,col){const x=r*Math.cos(a),z=r*Math.sin(a);const s=new THREE.Mesh(new THREE.CylinderGeometry(d/2,d/2,TH,20),new THREE.MeshStandardMaterial({color:col,roughness:.2,metalness:.7,emissive:col,emissiveIntensity:.1}));s.position.set(x,TH/2,z);s.castShadow=true;return s}
 for(let i=0;i<4;i++){scene.add(mkShaft(i*Math.PI/2,R_inner,.2,0xff4444));scene.add(mkShaft(i*Math.PI/2+Math.PI/4,R_outer,.25,0x3388ee))}
 
-// ============ RING ASSEMBLIES ============
-// Helper: create a horizontal torus at given y height (world-space position)
+// ═══════════════════════════════════════════
+// LIGHT AXIS GROUP (光轴)
+// ═══════════════════════════════════════════
+const lightAxisGroup = new THREE.Group();
+const axisGeo = new THREE.CylinderGeometry(0.06, 0.06, 52, 8);
+const axisMat = new THREE.MeshBasicMaterial({color:0xffffff,opacity:0.35,transparent:true});
+const lightAxis = new THREE.Mesh(axisGeo, axisMat);
+lightAxis.position.y = 26;
+lightAxisGroup.add(lightAxis);
+// Glow rings along the axis every 5m
+for(let y=2; y<52; y+=5) {
+  const glowRing = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.015, 8, 24), new THREE.MeshBasicMaterial({color:0x88aacc,opacity:0.5,transparent:true}));
+  glowRing.rotation.x = -Math.PI/2; glowRing.position.y = y;
+  lightAxisGroup.add(glowRing);
+}
+lightAxisGroup.visible = true;
+scene.add(lightAxisGroup);
+
+// ═══════════════════════════════════════════
+// CAPSULE MODEL — simplified, inspired by reference
+// Egg-shaped gondola, clean external frame, two riders in prone position
+// ═══════════════════════════════════════════
+function buildCabin(parent, isRed) {
+  const accentColor = isRed ? 0xff4444 : 0x3388ff;
+  const accentColor2 = isRed ? 0xcc2222 : 0x2266cc;
+  const frameColorDark = 0x3d4d5a;
+  const frameColorMid = 0x5a6a7a;
+
+  // Materials
+  const frameMatDark = new THREE.MeshStandardMaterial({color:frameColorDark, roughness:.3, metalness:.7});
+  const frameMatMid = new THREE.MeshStandardMaterial({color:frameColorMid, roughness:.25, metalness:.75});
+  const accentMat = new THREE.MeshStandardMaterial({color:accentColor, roughness:.25, metalness:.5, emissive:accentColor, emissiveIntensity:.2});
+  const accentMatGlow = new THREE.MeshStandardMaterial({color:accentColor, roughness:.2, metalness:.3, emissive:accentColor, emissiveIntensity:.4});
+  const R = 0.55; // gondola base radius ~1.1m diameter
+  const eY = 1.35; // elongation factor (egg-shaped)
+
+  // ── Glass ellipsoid shell ──
+  const glassMat = new THREE.MeshPhysicalMaterial({
+    color: isRed ? 0xffdddd : 0xddeeff,
+    roughness: 0.03, metalness: 0.02,
+    opacity: 0.20, transparent: true,
+    clearcoat: 0.55, clearcoatRoughness: 0.06,
+    envMapIntensity: 0.45,
+  });
+  const glassShell = new THREE.Mesh(new THREE.SphereGeometry(R, 64, 48), glassMat);
+  glassShell.scale.set(1, eY, 1);
+  parent.add(glassShell);
+
+  // ── Equatorial structural ring (main horizontal frame) ──
+  const eqRing = new THREE.Mesh(new THREE.TorusGeometry(R * 1.03, 0.065, 12, 72), frameMatDark);
+  eqRing.rotation.x = Math.PI/2;
+  parent.add(eqRing);
+
+  // Equatorial accent stripe (team color)
+  const eqStripe = new THREE.Mesh(new THREE.TorusGeometry(R * 1.04, 0.02, 8, 72), accentMat);
+  eqStripe.rotation.x = Math.PI/2;
+  parent.add(eqStripe);
+
+  // ── 4 vertical frame ribs (cardinal directions, clean look) ──
+  [0, Math.PI/2, Math.PI, Math.PI*1.5].forEach(angle => {
+    const rib = new THREE.Mesh(
+      new THREE.TorusGeometry(R * 1.01, 0.04, 8, 36, Math.PI), frameMatDark
+    );
+    rib.rotation.y = angle;
+    rib.rotation.x = Math.PI/2;
+    rib.scale.y = eY;
+    parent.add(rib);
+  });
+
+  // ── Interior floor platform ──
+  const floorY = -0.15 * eY;
+  const floorR = R * 0.72;
+  const floorPanel = new THREE.Mesh(
+    new THREE.CylinderGeometry(floorR, floorR, 0.015, 32),
+    new THREE.MeshStandardMaterial({color:0x3a4a5a, roughness:.5, metalness:.6, opacity:.65, transparent:true})
+  );
+  floorPanel.position.y = floorY;
+  parent.add(floorPanel);
+
+  // ── PRONE SEATS — two riders in "superhero flight" position ──
+  const seatMat = new THREE.MeshStandardMaterial({color:0x1a1a1a, roughness:.75, metalness:.08});
+  const seatAccentMat = new THREE.MeshStandardMaterial({color:0x2a2a2a, roughness:.6, metalness:.15});
+  const padW = 0.30, padL = 1.05;
+
+  function addProneSeat(xPos) {
+    const seatGroup = new THREE.Group();
+    seatGroup.position.set(xPos, 0.02, -0.05);
+
+    // Main body pad
+    const bodyPad = new THREE.Mesh(new THREE.BoxGeometry(padW, 0.05, padL), seatMat);
+    bodyPad.rotation.x = -0.4;
+    bodyPad.position.set(0, 0.04, 0.08);
+    seatGroup.add(bodyPad);
+
+    // Chest support (raised front)
+    const chestPad = new THREE.Mesh(new THREE.BoxGeometry(padW, 0.06, 0.38), seatAccentMat);
+    chestPad.rotation.x = -0.55;
+    chestPad.position.set(0, 0.16, 0.38);
+    seatGroup.add(chestPad);
+
+    // Hip pad
+    const hipPad = new THREE.Mesh(new THREE.BoxGeometry(padW * 0.7, 0.04, 0.25), seatAccentMat);
+    hipPad.position.set(0, 0.07, -0.15);
+    seatGroup.add(hipPad);
+
+    // Thigh supports
+    [-0.06, 0.06].forEach(tx => {
+      const thigh = new THREE.Mesh(new THREE.BoxGeometry(padW * 0.28, 0.04, 0.55), seatMat);
+      thigh.position.set(tx, 0.01, -0.38);
+      thigh.rotation.x = 0.15;
+      seatGroup.add(thigh);
+    });
+
+    // Foot rest bar
+    const footBar = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.025, 0.025, padW, 8),
+      new THREE.MeshStandardMaterial({color:0x667788, roughness:.2, metalness:.8})
+    );
+    footBar.rotation.z = Math.PI/2;
+    footBar.position.set(0, -0.12, -0.62);
+    seatGroup.add(footBar);
+
+    // ── Control handles (motorcycle-grip style) ──
+    const handleMat = new THREE.MeshStandardMaterial({color:0x445566, roughness:.15, metalness:.85});
+    const gripMat = new THREE.MeshStandardMaterial({color:0x1a1a1a, roughness:.6, metalness:.1});
+
+    [-0.09, 0.09].forEach(hx => {
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.34, 8), handleMat);
+      arm.rotation.x = -0.55;
+      arm.position.set(hx, 0.24, 0.52);
+      seatGroup.add(arm);
+
+      const grip = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.11, 8), gripMat);
+      grip.rotation.z = Math.PI/2;
+      grip.position.set(hx, 0.34, 0.67);
+      seatGroup.add(grip);
+
+      // Trigger button
+      const trigger = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.012, 0.012, 0.03, 6),
+        new THREE.MeshStandardMaterial({color:accentColor, roughness:.2, metalness:.3, emissive:accentColor, emissiveIntensity:.5})
+      );
+      trigger.position.set(hx, 0.31, 0.69);
+      seatGroup.add(trigger);
+    });
+
+    // HUD display panel
+    const hudPanel = new THREE.Mesh(
+      new THREE.BoxGeometry(0.20, 0.11, 0.012),
+      new THREE.MeshStandardMaterial({color:0x112233, roughness:.08, metalness:.4, emissive:0x113355, emissiveIntensity:.7})
+    );
+    hudPanel.rotation.x = -0.7;
+    hudPanel.position.set(0, 0.29, 0.57);
+    seatGroup.add(hudPanel);
+
+    return seatGroup;
+  }
+
+  // Gunner (left) and Pilot (right)
+  parent.add(addProneSeat(-0.25));
+  parent.add(addProneSeat(0.25));
+
+  // ── Central divider console ──
+  const consoleMat = new THREE.MeshStandardMaterial({color:0x3a4a5a, roughness:.3, metalness:.6});
+  const divider = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.09, 0.58), consoleMat);
+  divider.position.set(0, 0.09, 0.10);
+  parent.add(divider);
+  const consoleLight = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.008, 0.52), accentMatGlow);
+  consoleLight.position.set(0, 0.14, 0.10);
+  parent.add(consoleLight);
+
+  // ── TOP SUSPENSION YOKE (clevis-style) ──
+  const mountGroup = new THREE.Group();
+  mountGroup.position.y = R * 1.05 * eY;
+
+  // Main mounting block
+  mountGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.12, 0.30), frameMatDark));
+
+  // Yoke side plates
+  [-0.09, 0.09].forEach(sx => {
+    const yokePlate = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.26, 0.22), frameMatDark);
+    yokePlate.position.set(sx, 0.16, 0);
+    mountGroup.add(yokePlate);
+  });
+
+  // Top cross pin (pitch pivot)
+  const crossPin = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.045, 0.045, 0.30, 16),
+    new THREE.MeshStandardMaterial({color:0x8899aa, roughness:.1, metalness:.9})
+  );
+  crossPin.rotation.z = Math.PI/2;
+  crossPin.position.y = 0.28;
+  mountGroup.add(crossPin);
+
+  // Pitch axis bar (team color)
+  const pitchBar = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.022, 0.022, 0.72, 8),
+    new THREE.MeshStandardMaterial({color:accentColor, roughness:.2, metalness:.6, emissive:accentColor, emissiveIntensity:.3})
+  );
+  pitchBar.rotation.z = Math.PI/2;
+  pitchBar.position.y = 0.06;
+  mountGroup.add(pitchBar);
+
+  // Upper connection rod
+  const connRod = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.06, 0.06, 0.18, 16),
+    new THREE.MeshStandardMaterial({color:0x778899, roughness:.15, metalness:.85})
+  );
+  connRod.position.y = 0.38;
+  mountGroup.add(connRod);
+
+  // Ring attachment eye at top
+  const eyeRing = new THREE.Mesh(
+    new THREE.TorusGeometry(0.07, 0.025, 8, 20),
+    new THREE.MeshStandardMaterial({color:0x8899aa, roughness:.1, metalness:.9})
+  );
+  eyeRing.position.y = 0.48;
+  mountGroup.add(eyeRing);
+
+  parent.add(mountGroup);
+
+  // ── Bottom structural ring ──
+  const botRing = new THREE.Mesh(
+    new THREE.TorusGeometry(R * 0.65, 0.035, 8, 48), frameMatDark
+  );
+  botRing.rotation.x = Math.PI/2;
+  botRing.position.y = -R * 0.80 * eY;
+  parent.add(botRing);
+
+  // Bottom glow ring (team color)
+  const botGlow = new THREE.Mesh(
+    new THREE.TorusGeometry(R * 0.55, 0.015, 8, 40), accentMatGlow
+  );
+  botGlow.rotation.x = Math.PI/2;
+  botGlow.position.y = -R * 0.68 * eY;
+  parent.add(botGlow);
+
+  // ── Team ID panel (front equatorial) ──
+  const idPanelFront = new THREE.Mesh(
+    new THREE.BoxGeometry(0.20, 0.04, 0.04), accentMatGlow
+  );
+  idPanelFront.position.set(0, 0, R * 1.05);
+  parent.add(idPanelFront);
+
+  // ── Side marker lights ──
+  [Math.PI/2, -Math.PI/2].forEach(a => {
+    const marker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.025, 8, 8),
+      new THREE.MeshStandardMaterial({color:accentColor, roughness:.15, emissive:accentColor, emissiveIntensity:.6})
+    );
+    marker.position.set(R * 1.04 * Math.cos(a), 0, R * 1.04 * Math.sin(a));
+    parent.add(marker);
+  });
+}
+
+// ═══════════════════════════════════════════
+// RING ASSEMBLIES
+// ═══════════════════════════════════════════
 function hTorus(r, tube, segs, mat, y) {
   const m = new THREE.Mesh(new THREE.TorusGeometry(r, tube, segs, 128), mat);
-  m.rotation.x = -Math.PI / 2; // tilt to horizontal
+  m.rotation.x = -Math.PI / 2;
   m.position.y = y;
   return m;
 }
-
-// Helper: create a cylinder and position it in world space, then rotate
 function posCyl(r, h, segs, mat, x, y, z, rx, ry, rz) {
   const c = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, segs), mat);
   c.position.set(x, y, z);
@@ -294,249 +611,132 @@ function posCyl(r, h, segs, mat, x, y, z, rx, ry, rz) {
   return c;
 }
 
-// ============ DETAILED CAPSULE MODEL ============
-function buildCabin(parent, isRed) {
-  const bodyColor = isRed ? 0x3a1010 : 0x102040;
-  const accentColor = isRed ? 0xff4444 : 0x3388ff;
-  const frameColor = 0x4a5568; // dark metallic frame
-
-  // --- Main body: streamlined capsule shape ---
-  // Central section (0.85w × 0.4h × 1.4m long)
-  const bodyMat = new THREE.MeshStandardMaterial({ color: bodyColor, roughness: .5, metalness: .35 });
-  const body = new THREE.Mesh(new THREE.BoxGeometry(.85, .4, 1.4), bodyMat);
-  parent.add(body);
-
-  // Nose cone (rounded front — approximated with a half-cylinder)
-  const noseMat = new THREE.MeshStandardMaterial({ color: bodyColor, roughness: .4, metalness: .4 });
-  const nose = new THREE.Mesh(new THREE.CylinderGeometry(.15, .38, .3, 16, 1, false, 0, Math.PI), noseMat);
-  nose.rotation.x = -Math.PI / 2;
-  nose.position.set(0, 0, .85);
-  parent.add(nose);
-
-  // Tail section (tapered rear)
-  const tail = new THREE.Mesh(new THREE.CylinderGeometry(.2, .4, .3, 16), noseMat);
-  tail.rotation.x = -Math.PI / 2;
-  tail.position.set(0, 0, -.85);
-  parent.add(tail);
-
-  // --- Frame structure: tubular bars ---
-  const frameMat = new THREE.MeshStandardMaterial({ color: frameColor, roughness: .3, metalness: .7 });
-
-  // Side rails (left & right, along Z axis)
-  [[-.43, 0], [.43, 0]].forEach(([sx, sz]) => {
-    const rail = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, 2.0, 8), frameMat);
-    rail.rotation.x = Math.PI / 2;
-    rail.position.set(sx, 0, sz);
-    parent.add(rail);
-  });
-
-  // Cross bars (between side rails, at front, middle, rear)
-  [-.5, 0, .5].forEach(cz => {
-    const bar = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .86, 8), frameMat);
-    bar.rotation.z = Math.PI / 2;
-    bar.position.set(0, 0, cz);
-    parent.add(bar);
-  });
-
-  // --- Transparent canopy (curved dome - multiple horizontal arcs) ---
-  const canopyMat = new THREE.MeshStandardMaterial({ color: 0x4488aa, roughness: .08, metalness: .05, opacity: .25, transparent: true });
-  // Main canopy dome (half cylinder on top)
-  const canopy = new THREE.Mesh(new THREE.CylinderGeometry(.38, .38, 1.6, 16, 1, false, 0, Math.PI), canopyMat);
-  canopy.position.y = .25;
-  canopy.rotation.y = Math.PI / 2;
-  parent.add(canopy);
-
-  // Canopy frame ribs
-  const ribMat = new THREE.MeshStandardMaterial({ color: frameColor, roughness: .3, metalness: .7 });
-  [-.35, .35].forEach(cz => {
-    const rib = new THREE.Mesh(new THREE.TorusGeometry(.38, .012, 6, 16, Math.PI), ribMat);
-    rib.position.set(0, .25, cz);
-    rib.rotation.y = Math.PI / 2;
-    parent.add(rib);
-  });
-
-  // --- Transparent floor panel ---
-  const floorMat = new THREE.MeshStandardMaterial({ color: 0x4488aa, roughness: .05, metalness: .05, opacity: .3, transparent: true });
-  const floor = new THREE.Mesh(new THREE.BoxGeometry(.75, .03, 1.5), floorMat);
-  floor.position.y = -.22;
-  parent.add(floor);
-
-  // Floor frame
-  const floorFrame = new THREE.Mesh(new THREE.BoxGeometry(.82, .02, 1.6), new THREE.MeshStandardMaterial({ color: frameColor, roughness: .3, metalness: .7 }));
-  floorFrame.position.y = -.24;
-  parent.add(floorFrame);
-
-  // --- Seats: two prone-position pads ---
-  const seatMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: .7, metalness: .1 });
-
-  // Gunner seat (left side, x=-0.22)
-  const gunnerSeat = new THREE.Mesh(new THREE.BoxGeometry(.35, .06, 1.2), seatMat);
-  gunnerSeat.position.set(-.22, .12, 0);
-  parent.add(gunnerSeat);
-
-  // Pilot seat (right side, x=+0.22)
-  const pilotSeat = new THREE.Mesh(new THREE.BoxGeometry(.35, .06, 1.2), seatMat);
-  pilotSeat.position.set(.22, .12, 0);
-  parent.add(pilotSeat);
-
-  // --- Gunner equipment (left side) ---
-  const gunMat = new THREE.MeshStandardMaterial({ color: 0x334455, roughness: .25, metalness: .75 });
-
-  // Twin laser grips (two small vertical posts near front)
-  [-.15, -.29].forEach(gx => {
-    // Grip post
-    const grip = new THREE.Mesh(new THREE.CylinderGeometry(.025, .025, .2, 8), new THREE.MeshStandardMaterial({ color: 0x445566, roughness: .2, metalness: .8 }));
-    grip.position.set(gx, .22, .5);
-    parent.add(grip);
-    // Trigger
-    const trigger = new THREE.Mesh(new THREE.BoxGeometry(.04, .015, .03), new THREE.MeshStandardMaterial({ color: 0x8899aa, roughness: .15, metalness: .85 }));
-    trigger.position.set(gx, .15, .5);
-    parent.add(trigger);
-    // Barrel tube
-    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .25, 8), new THREE.MeshStandardMaterial({ color: 0x667788, roughness: .1, metalness: .9 }));
-    barrel.rotation.x = Math.PI / 2;
-    barrel.position.set(gx, .22, .62);
-    parent.add(barrel);
-  });
-
-  // Gunner targeting display
-  const display = new THREE.Mesh(new THREE.BoxGeometry(.2, .12, .02), new THREE.MeshStandardMaterial({ color: 0x223344, roughness: .1, metalness: .3, emissive: 0x111133, emissiveIntensity: .5 }));
-  display.position.set(-.22, .28, .35);
-  display.rotation.x = -.2;
-  parent.add(display);
-
-  // --- Pilot equipment (right side) ---
-  // Control stick (joystick)
-  const stickBase = new THREE.Mesh(new THREE.CylinderGeometry(.04, .06, .08, 12), gunMat);
-  stickBase.position.set(.22, .2, .3);
-  parent.add(stickBase);
-  const stick = new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .18, 8), gunMat);
-  stick.position.set(.22, .28, .3);
-  stick.rotation.x = .15;
-  parent.add(stick);
-
-  // Throttle lever
-  const throttle = new THREE.Mesh(new THREE.BoxGeometry(.03, .15, .04), new THREE.MeshStandardMaterial({ color: 0x556677, roughness: .2, metalness: .8 }));
-  throttle.position.set(.35, .18, -.1);
-  parent.add(throttle);
-
-  // Pilot instrument panel
-  const panel = new THREE.Mesh(new THREE.BoxGeometry(.18, .1, .02), new THREE.MeshStandardMaterial({ color: 0x223344, roughness: .1, metalness: .3, emissive: 0x111133, emissiveIntensity: .5 }));
-  panel.position.set(.22, .28, .15);
-  panel.rotation.x = -.25;
-  parent.add(panel);
-
-  // --- Team accent stripe ---
-  const stripeMat = new THREE.MeshStandardMaterial({ color: accentColor, roughness: .3, metalness: .4, emissive: accentColor, emissiveIntensity: .15 });
-  const stripe = new THREE.Mesh(new THREE.BoxGeometry(.86, .03, 1.45), stripeMat);
-  stripe.position.y = .21;
-  parent.add(stripe);
-
-  // --- Suspension mount (connection to cantilever arm) ---
-  const mount = new THREE.Mesh(new THREE.BoxGeometry(.25, .15, .3), new THREE.MeshStandardMaterial({ color: frameColor, roughness: .3, metalness: .7 }));
-  mount.position.y = .26;
-  parent.add(mount);
-}
+// Global cabin tracking
+const allCabins = [];
 
 function mkRing(sr, tr, cr, color, sAngs, fOut) {
-  // === NON-ROTATING PART: sleeve assembly ===
   const sleeve = new THREE.Group();
   const slM = new THREE.MeshStandardMaterial({ color, roughness: .3, metalness: .55, emissive: color, emissiveIntensity: .08 });
   const motMat = new THREE.MeshStandardMaterial({ color: 0x445566, roughness: .35, metalness: .6 });
 
-  // Guide sleeve ring — horizontal at y=0
   sleeve.add(hTorus(sr + .35, .18, 32, slM, 0));
-
-  // Bearing housings on sleeve
-  sAngs.forEach(a => {
-    sleeve.add(posCyl(.22, .7, 16, slM, sr * Math.cos(a), 0, sr * Math.sin(a)));
-  });
-
-  // Rotation motors mounted on sleeve (non-rotating, drives pinion)
+  sAngs.forEach(a => { sleeve.add(posCyl(.22, .7, 16, slM, sr * Math.cos(a), 0, sr * Math.sin(a))); });
   sAngs.forEach(a => {
     const mx = (sr + 1.2) * Math.cos(a), mz = (sr + 1.2) * Math.sin(a);
     const motor = new THREE.Mesh(new THREE.BoxGeometry(.3, .35, .4), motMat);
-    motor.position.set(mx, -.1, mz);
-    motor.rotation.y = -a;
+    motor.position.set(mx, -.1, mz); motor.rotation.y = -a;
     sleeve.add(motor);
     sleeve.add(posCyl(.08, .15, 8, new THREE.MeshStandardMaterial({ color: 0x8899aa, roughness: .2, metalness: .8 }), mx, -.55, mz));
   });
-
-  // Cable attachment eyes (on non-rotating sleeve)
   sAngs.forEach(a => {
     const eye = new THREE.Mesh(new THREE.TorusGeometry(.12, .03, 8, 16), new THREE.MeshStandardMaterial({ color: 0xd29922, roughness: .2, metalness: .9 }));
     eye.position.set(sr * Math.cos(a), .4, sr * Math.sin(a));
     sleeve.add(eye);
   });
 
-  // === ROTATING PART: slewing bearing outer race + truss + cabins ===
   const rotor = new THREE.Group();
   const tM = new THREE.MeshStandardMaterial({ color, roughness: .4, metalness: .45, emissive: color, emissiveIntensity: .06 });
   const bearingMat = new THREE.MeshStandardMaterial({ color: 0x667788, roughness: .2, metalness: .8 });
   const gearMat = new THREE.MeshStandardMaterial({ color: 0x556677, roughness: .3, metalness: .7 });
 
-  // Slewing bearing ring (visual) at y=-0.5
   rotor.add(hTorus(sr + .15, .1, 16, bearingMat, -.5));
-
-  // Gear ring at y=-0.65
   rotor.add(hTorus(sr + .05, .08, 16, gearMat, -.65));
+  rotor.add(hTorus(tr, .35, 32, tM, -1.2));
+  rotor.add(hTorus(tr - .9, .15, 16, tM.clone(), -1.2));
 
-  // Truss — outer ring + inner ring
-  rotor.add(hTorus(tr, .22, 32, tM, -1.2));
-  rotor.add(hTorus(tr - .9, .1, 16, tM.clone(), -1.2));
-
-  // Radial struts
   for (let i = 0; i < 32; i++) {
     const a = i * Math.PI / 16;
     const ox = tr * Math.cos(a), oz = tr * Math.sin(a);
     const ix = (tr - .9) * Math.cos(a), iz = (tr - .9) * Math.sin(a);
     const strut = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, .9, 8), tM);
     strut.position.set((ox+ix)/2, -1.2, (oz+iz)/2);
-    strut.rotation.z = Math.PI / 2;
-    strut.rotation.y = -a;
+    strut.rotation.z = Math.PI / 2; strut.rotation.y = -a;
     rotor.add(strut);
   }
 
-  // Cantilevers + cabins
+  // ── Deck surface (annular disc platform, like reference) ──
+  // Handle both ring configs: inner ring has sr < tr, outer ring has tr < sr
+  const deckInnerR = Math.min(sr, tr) + 0.4;
+  const deckOuterR = Math.max(sr, tr);
+  const deckGeo = new THREE.RingGeometry(deckInnerR, deckOuterR, 96);
+  const deckMat = new THREE.MeshStandardMaterial({ color: 0x3d4d5a, roughness: .55, metalness: .5, side: THREE.DoubleSide });
+  const deck = new THREE.Mesh(deckGeo, deckMat);
+  deck.rotation.x = -Math.PI / 2;
+  deck.position.y = -1.15;
+  rotor.add(deck);
+
+  // Deck underside panel (for depth when viewed from below)
+  const deckUnder = new THREE.Mesh(deckGeo, new THREE.MeshStandardMaterial({ color: 0x2a3540, roughness: .6, metalness: .4, side: THREE.DoubleSide }));
+  deckUnder.rotation.x = -Math.PI / 2;
+  deckUnder.position.y = -1.28;
+  rotor.add(deckUnder);
+
+  // Outer edge rim / railing
+  const rimGeo = new THREE.TorusGeometry(deckOuterR - 0.02, 0.06, 8, 96);
+  const rim = new THREE.Mesh(rimGeo, new THREE.MeshStandardMaterial({ color: 0x667788, roughness: .25, metalness: .7, emissive: color, emissiveIntensity: .05 }));
+  rim.rotation.x = -Math.PI / 2;
+  rim.position.y = -1.05;
+  rotor.add(rim);
+
+  // Inner edge rim
+  const rimInnerGeo = new THREE.TorusGeometry(deckInnerR + 0.02, 0.05, 8, 72);
+  const rimInner = new THREE.Mesh(rimInnerGeo, new THREE.MeshStandardMaterial({ color: 0x556677, roughness: .25, metalness: .7 }));
+  rimInner.rotation.x = -Math.PI / 2;
+  rimInner.position.y = -1.08;
+  rotor.add(rimInner);
+
+  // Deck cross-bracing (radial beams on top of deck, every 15°)
+  for (let i = 0; i < 24; i++) {
+    const angle = i * Math.PI / 12;
+    const midR = (deckInnerR + deckOuterR) / 2;
+    const beamLen = deckOuterR - deckInnerR;
+    const beam = new THREE.Mesh(new THREE.BoxGeometry(beamLen, 0.03, 0.04), new THREE.MeshStandardMaterial({ color: 0x5a6a7a, roughness: .3, metalness: .6 }));
+    beam.position.set(midR * Math.cos(angle), -1.10, midR * Math.sin(angle));
+    beam.rotation.y = -angle;
+    rotor.add(beam);
+  }
+
   for (let i = 0; i < 10; i++) {
     const a = i * Math.PI * 2 / 10;
     const tx = tr * Math.cos(a), tz = tr * Math.sin(a);
     const cx = cr * Math.cos(a), cz = cr * Math.sin(a);
     const dx = cx - tx, dz = cz - tz, len = Math.sqrt(dx*dx+dz*dz);
+
+    // Radial arm — connects disc edge directly to cabin top yoke
     const arm = new THREE.Mesh(new THREE.CylinderGeometry(.07, .07, len, 8), new THREE.MeshStandardMaterial({ color, roughness: .4, metalness: .55 }));
     arm.position.set((tx+cx)/2, -1.2, (tz+cz)/2);
-    arm.rotation.z = Math.PI / 2;
-    arm.rotation.y = -a;
+    arm.rotation.z = Math.PI / 2; arm.rotation.y = -a;
     rotor.add(arm);
 
+    // Cabin group — mounted directly at disc level via radial arm
     const cG = new THREE.Group();
-    buildCabin(cG, color === 0xff4444);
+    const isRed = color === 0xff4444;
+    buildCabin(cG, isRed);
     cG.position.set(cx, -1.2, cz);
     cG.rotation.y = fOut ? a : a + Math.PI;
     rotor.add(cG);
+
+    // Track cabin for monitoring
+    allCabins.push({ group: cG, ring: isRed ? 'inner' : 'outer', index: i, isRed, baseAngle: a, facingOut: fOut });
   }
 
-  // Nest rotor inside sleeve — sleeve moves up/down, rotor rotates within
   sleeve.add(rotor);
-
   return { sleeve, rotor };
 }
 
 const innerS=[0,Math.PI/2,Math.PI,3*Math.PI/2],outerS=[Math.PI/4,3*Math.PI/4,5*Math.PI/4,7*Math.PI/4];
 const innerRing = mkRing(3.5,4.5,6.,0xff4444,innerS,true);
-const outerRing = mkRing(9.5,8.75,8.,0x3388ee,outerS,false);
+const outerRing = mkRing(9.5,8.75,10.,0x3388ee,outerS,false);
 innerRing.sleeve.position.y=5;outerRing.sleeve.position.y=5;
 scene.add(innerRing.sleeve);scene.add(outerRing.sleeve);
 
-// ============ CABLES ============
+// ═══════════════════════════════════════════
+// CABLES
+// ═══════════════════════════════════════════
 const cableGroup = new THREE.Group(); scene.add(cableGroup);
 const cableTubes = [];
-
-// Cables offset from shafts: different radius + different angle
-// Inner cables: r=4.0m (shafts at 3.5m), angles halfway between shafts
-// Outer cables: r=9.0m (shafts at 9.5m), angles halfway between shafts
 function makeCable(x, z, color) {
-  const r = 0.10; // 10cm radius — visible but not overpowering
+  const r = 0.10;
   const tube = new THREE.Mesh(
     new THREE.CylinderGeometry(r, r, 1, 10),
     new THREE.MeshStandardMaterial({color, roughness:.3, metalness:.1, emissive:color, emissiveIntensity:.6})
@@ -544,15 +744,10 @@ function makeCable(x, z, color) {
   tube.userData = { x, z, color };
   return tube;
 }
-
-// Inner cables: offset 45° from inner shafts, at r=4.0m
 const innerCAngles = [Math.PI/4, 3*Math.PI/4, 5*Math.PI/4, 7*Math.PI/4];
 innerCAngles.forEach(a => cableTubes.push(makeCable(4.0*Math.cos(a), 4.0*Math.sin(a), 0xff3333)));
-
-// Outer cables: offset 45° from outer shafts, at r=9.0m
 const outerCAngles = [0, Math.PI/2, Math.PI, 3*Math.PI/2];
 outerCAngles.forEach(a => cableTubes.push(makeCable(9.0*Math.cos(a), 9.0*Math.sin(a), 0x3388ff)));
-
 cableTubes.forEach(t => cableGroup.add(t));
 
 function updateCables(t) {
@@ -567,7 +762,9 @@ function updateCables(t) {
   });
 }
 
-// ============ PHASE LOGIC ============
+// ═══════════════════════════════════════════
+// PHASE LOGIC
+// ═══════════════════════════════════════════
 const PHASES=[{name:'boarding',label:'上下客',dur:10,color:'#8b949e'},{name:'climb',label:'爬升预热',dur:30,color:'#d29922'},{name:'combat',label:'战斗阶段',dur:90,color:'#e6edf3'},{name:'finale',label:'终局!',dur:15,color:'#ff6b6b'},{name:'return',label:'返航',dur:30,color:'#4da6ff'}];
 const CYCLE_TOTAL=PHASES.reduce((s,p)=>s+p.dur,0);
 const RPM_NOMINAL=3, RPM_RAD=RPM_NOMINAL*2*Math.PI/60;
@@ -581,45 +778,67 @@ function getRingState(ct){
   else{const p=(ct_-145)/30;zR=48-p*43;zB=8-p*3;wR=RPM_RAD*.3*(1-p);wB=wR;sR=120;sB=85}
   return{zR,zB,wR,wB,sR,sB};
 }
-
 function getPhaseInfo(ct){const ct_=ct%CYCLE_TOTAL;let t=0;for(const p of PHASES){if(ct_<t+p.dur)return{...p,start:t,elapsed:ct_-t};t+=p.dur}return{...PHASES[4],start:145,elapsed:ct_-145}}
 
-// ============ TIMELINE SEGMENTS ============
+// ═══════════════════════════════════════════
+// TIMELINE SEGMENTS
+// ═══════════════════════════════════════════
 (function initSegOverlay(){
   const ov=document.getElementById('segOverlay');let t=0;
   PHASES.forEach(p=>{const w=p.dur/CYCLE_TOTAL*100;const seg=document.createElement('span');seg.style.cssText=`width:${w}%;height:100%;background:${p.color}22;border-right:1px solid ${p.color}44;`;seg.title=p.label;ov.appendChild(seg)});
 })();
 
-// ============ PIP COCKPIT VIEWS ============
-// Create small renderer targets for PiP views
-const pipSize = { w: 260, h: 200 };
+// ═══════════════════════════════════════════
+// CABIN INTERIOR MONITOR CAMERA + RENDERER
+// ═══════════════════════════════════════════
+const cabinViewCanvas = document.getElementById('cabinViewCanvas');
+const cabinRenderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
+cabinRenderer.setPixelRatio(1);
+cabinRenderer.setSize(256, 160);
+cabinRenderer.setClearColor(0x0d1117);
+const cabinMonitorCam = new THREE.PerspectiveCamera(65, 256/160, 0.08, 40);
 
-// PiP cameras — third-person behind specific capsules
+function updateCabinMonitorCamera() {
+  const { ring, index } = selectedCabin;
+  const ringObj = ring === 'inner' ? innerRing : outerRing;
+  const cabinData = allCabins.find(c => c.ring === ring && c.index === index);
+  if (!cabinData) return;
+
+  cabinData.group.updateWorldMatrix(true, false);
+  const m = cabinData.group.matrixWorld;
+
+  // Camera inside gondola: behind seats, slightly above, looking forward through glass
+  const localEye = new THREE.Vector3(0, 0.22, -0.45);
+  const localTarget = new THREE.Vector3(0, 0.06, 0.45);
+
+  const worldEye = localEye.clone().applyMatrix4(m);
+  const worldTarget = localTarget.clone().applyMatrix4(m);
+
+  cabinMonitorCam.position.copy(worldEye);
+  cabinMonitorCam.lookAt(worldTarget);
+}
+
+// ═══════════════════════════════════════════
+// PIP COCKPIT VIEWS
+// ═══════════════════════════════════════════
+const pipSize = { w: 260, h: 200 };
 const pipCamI = new THREE.PerspectiveCamera(60, pipSize.w / pipSize.h, 0.3, 80);
 const pipCamO = new THREE.PerspectiveCamera(60, pipSize.w / pipSize.h, 0.3, 80);
-
-// Eye orbit angles (radians): { azimuth, elevation }
 const eyeI = { az: 0, el: 0.3 };
 const eyeO = { az: Math.PI, el: 0.3 };
-
-// Joystick state: { pitch, yaw } in degrees, clamped to ±30°
 const jsI = { pitch: 0, yaw: 0 };
 const jsO = { pitch: 0, yaw: 0 };
-
-// Drag state
-let dragTarget = null; // 'jsI','jsO','eyeI','eyeO'
+let dragTarget = null;
 let dragStart = { x: 0, y: 0, px: 0, py: 0 };
 
 function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
-// Setup drag on joystick and eye elements
 ['Inner','Outer'].forEach(name => {
   const jsEl = document.getElementById('js'+name);
   const eyeEl = document.getElementById('eye'+name);
   const jsState = name === 'Inner' ? jsI : jsO;
   const eyeState = name === 'Inner' ? eyeI : eyeO;
 
-  // Joystick drag
   jsEl.addEventListener('pointerdown', e => {
     dragTarget = 'js'+name; e.preventDefault();
     dragStart = { x: e.clientX, y: e.clientY, px: jsState.pitch, py: jsState.yaw };
@@ -627,18 +846,15 @@ function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   });
   jsEl.addEventListener('pointermove', e => {
     if (dragTarget !== 'js'+name) return;
-    const dx = (e.clientX - dragStart.x) * 0.5; // sensitivity
+    const dx = (e.clientX - dragStart.x) * 0.5;
     const dy = -(e.clientY - dragStart.y) * 0.5;
     jsState.pitch = clamp(dragStart.px + dy, -30, 30);
     jsState.yaw = clamp(dragStart.py + dx, -30, 30);
-    // Update knob position
     const knob = jsEl.querySelector('.knob');
     knob.style.left = (50 + jsState.yaw / 30 * 40) + '%';
     knob.style.top = (50 - jsState.pitch / 30 * 40) + '%';
   });
   jsEl.addEventListener('pointerup', () => { dragTarget = null; });
-
-  // Eye drag
   eyeEl.addEventListener('pointerdown', e => {
     dragTarget = 'eye'+name; e.preventDefault();
     dragStart = { x: e.clientX, y: e.clientY, px: eyeState.az, py: eyeState.el };
@@ -652,13 +868,11 @@ function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   eyeEl.addEventListener('pointerup', () => { dragTarget = null; });
 });
 
-// Get world position and facing of a specific capsule on a ring
 function getCabinWorldPos(ring, index, rotorAngle) {
   const a = index * Math.PI * 2 / 10;
-  const cr = ring === innerRing ? 6.0 : 8.0;
+  const cr = ring === innerRing ? 6.0 : 10.0;
   const fOut = ring === innerRing;
-  const faceLocal = fOut ? a : a + Math.PI; // face outward/inward
-
+  const faceLocal = fOut ? a : a + Math.PI;
   const localX = cr * Math.cos(a), localZ = cr * Math.sin(a);
   const cosR = Math.cos(rotorAngle), sinR = Math.sin(rotorAngle);
   const wx = localX * cosR - localZ * sinR;
@@ -668,9 +882,201 @@ function getCabinWorldPos(ring, index, rotorAngle) {
   return { x: wx, y: wy, z: wz, face: faceWorld };
 }
 
-// ============ ANIMATION ============
+// ═══════════════════════════════════════════
+// UI: MONITORING PANEL
+// ═══════════════════════════════════════════
+let selectedCabin = { ring: 'inner', index: 0 };
+let viewMode = 'free';
+let eStop = false;
+
+// Build cabin selection buttons
+function buildCabinButtons() {
+  const redGrid = document.getElementById('redBtns');
+  const blueGrid = document.getElementById('blueBtns');
+  for (let i = 0; i < 10; i++) {
+    const rb = document.createElement('button');
+    rb.className = 'cabin-btn red-ring';
+    rb.textContent = (i+1);
+    rb.title = `红环舱体#${i+1}`;
+    rb.addEventListener('click', () => selectCabin('inner', i));
+    if (i === 0) rb.classList.add('active');
+    redGrid.appendChild(rb);
+
+    const bb = document.createElement('button');
+    bb.className = 'cabin-btn blue-ring';
+    bb.textContent = (i+1);
+    bb.title = `蓝环舱体#${i+1}`;
+    bb.addEventListener('click', () => selectCabin('outer', i));
+    blueGrid.appendChild(bb);
+  }
+}
+
+function selectCabin(ring, index) {
+  selectedCabin = { ring, index };
+  document.querySelectorAll('.cabin-btn').forEach(b => b.classList.remove('active'));
+  const grid = ring === 'inner' ? document.getElementById('redBtns') : document.getElementById('blueBtns');
+  grid.children[index].classList.add('active');
+  updateMonitorDisplay();
+}
+
+function updateMonitorDisplay() {
+  const { ring, index } = selectedCabin;
+  const ringObj = ring === 'inner' ? innerRing : outerRing;
+  const isRed = ring === 'inner';
+  const cabinData = allCabins.find(c => c.ring === ring && c.index === index);
+  if (!cabinData) return;
+
+  const rotorAngle = ringObj.rotor.rotation.y;
+  const pos = getCabinWorldPos(ringObj, index, rotorAngle);
+  const js = isRed ? jsI : jsO;
+
+  const monTitle = document.getElementById('monTitle');
+  monTitle.textContent = (isRed ? '🔴 红环' : '🔵 蓝环') + ` 舱体 #${index+1}`;
+  monTitle.className = 'title ' + (isRed ? 'red' : 'blue');
+
+  const pi = getPhaseInfo(animTime);
+  const {sR, sB} = getRingState(animTime);
+  const shooterEl = document.getElementById('monShooter');
+  if (pi.name === 'combat') {
+    shooterEl.textContent = '射击中';
+    shooterEl.className = 'val active';
+  } else if (pi.name === 'finale') {
+    shooterEl.textContent = isRed ? (sR > sB ? '胜!' : '负...') : (sB > sR ? '胜!' : '负...');
+    shooterEl.className = 'val ' + ((isRed ? sR > sB : sB > sR) ? 'active' : 'danger');
+  } else {
+    shooterEl.textContent = '待命';
+    shooterEl.className = 'val ready';
+  }
+
+  const driverEl = document.getElementById('monDriver');
+  if (Math.abs(js.pitch) > 2 || Math.abs(js.yaw) > 2) {
+    driverEl.textContent = '操控中';
+    driverEl.className = 'val active';
+  } else {
+    driverEl.textContent = '待命';
+    driverEl.className = 'val ready';
+  }
+
+  document.getElementById('monPitch').textContent = Math.round(js.pitch) + '°';
+  const yawDeg = Math.round((pos.face % (Math.PI*2)) * 180 / Math.PI);
+  document.getElementById('monYaw').textContent = yawDeg + '°';
+  document.getElementById('monHeight').textContent = Math.round(pos.y) + 'm';
+}
+
+// ═══════════════════════════════════════════
+// UI: VISIBILITY TOGGLES
+// ═══════════════════════════════════════════
+const visibilityGroups = [
+  { key: 'tower', label: '塔柱', group: towerGroup },
+  { key: 'disc', label: '圆盘', group: discGroup },
+  { key: 'innerRing', label: '内环', group: innerRing.sleeve },
+  { key: 'outerRing', label: '外环', group: outerRing.sleeve },
+  { key: 'cables', label: '钢缆', group: cableGroup },
+  { key: 'foundation', label: '地基', group: foundationGroup },
+  { key: 'lightAxis', label: '光轴', group: lightAxisGroup },
+];
+
+function buildVisibilityToggles() {
+  const container = document.getElementById('toggleContainer');
+  visibilityGroups.forEach(vg => {
+    const row = document.createElement('div');
+    row.className = 'toggle-row';
+    const lbl = document.createElement('span');
+    lbl.className = 'tgl-label';
+    lbl.textContent = vg.label;
+    const btn = document.createElement('button');
+    btn.className = 'toggle-btn on';
+    btn.textContent = '显示';
+    btn.dataset.key = vg.key;
+    btn.addEventListener('click', () => {
+      const g = visibilityGroups.find(v => v.key === btn.dataset.key);
+      if (g.group.visible) {
+        g.group.visible = false;
+        btn.className = 'toggle-btn off';
+        btn.textContent = '隐藏';
+      } else {
+        g.group.visible = true;
+        btn.className = 'toggle-btn on';
+        btn.textContent = '显示';
+      }
+    });
+    row.appendChild(lbl);
+    row.appendChild(btn);
+    container.appendChild(row);
+  });
+}
+
+// ═══════════════════════════════════════════
+// UI: CONTROL BUTTONS
+// ═══════════════════════════════════════════
+document.getElementById('btnEStop').addEventListener('click', () => {
+  eStop = true;
+  const btn = document.getElementById('btnEStop');
+  btn.classList.add('estop-active');
+  btn.textContent = '⚠ 已急停';
+  document.getElementById('estopOverlay').classList.add('active');
+  document.getElementById('btnPlay').textContent = '▶';
+});
+
+document.getElementById('btnStart').addEventListener('click', () => {
+  eStop = false;
+  const btn = document.getElementById('btnEStop');
+  btn.classList.remove('estop-active');
+  btn.textContent = '🛑 急停';
+  document.getElementById('estopOverlay').classList.remove('active');
+  if (paused) {
+    paused = false;
+    document.getElementById('btnPlay').textContent = '⏸';
+  }
+});
+
+document.getElementById('btnAccel').addEventListener('click', () => {
+  const newSpeed = Math.min(timeScale * 1.5, 16);
+  setSpeed(Math.round(newSpeed * 10) / 10);
+  document.getElementById('speedLabel').textContent = timeScale + '×';
+});
+
+document.getElementById('btnDecel').addEventListener('click', () => {
+  const newSpeed = Math.max(timeScale / 1.5, 0.1);
+  setSpeed(Math.round(newSpeed * 100) / 100);
+  document.getElementById('speedLabel').textContent = timeScale + '×';
+});
+
+// ═══════════════════════════════════════════
+// UI: VIEW ANGLE BUTTONS
+// ═══════════════════════════════════════════
+document.querySelectorAll('#viewBtns .view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#viewBtns .view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    viewMode = btn.dataset.mode;
+    if (viewMode !== 'free') {
+      controls.enabled = false;
+    } else {
+      controls.enabled = true;
+    }
+  });
+});
+
+// Track team toggle
+document.querySelectorAll('#trackTeamBtns .view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#trackTeamBtns .view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const team = btn.dataset.team;
+    selectCabin(team === 'red' ? 'inner' : 'outer', 0);
+    viewMode = 'track';
+    controls.enabled = false;
+    document.querySelectorAll('#viewBtns .view-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('#viewBtns .view-btn[data-mode="track"]').classList.add('active');
+  });
+});
+
+// ═══════════════════════════════════════════
+// ANIMATION
+// ═══════════════════════════════════════════
 let timeScale=1, paused=false, animTime=0;
-let prevSmoothedZR=5, prevSmoothedZB=5; // for smooth interpolation
+let prevSmoothedZR=5, prevSmoothedZB=5;
 const SPEEDS={'0.5':'btn0_5x','1':'btn1x','2':'btn2x','4':'btn4x','8':'btn8x'};
 
 function setSpeed(s){
@@ -679,14 +1085,14 @@ function setSpeed(s){
   const k=String(Math.round(s*10)/10);
   const active=document.getElementById(SPEEDS[k]||SPEEDS['1']);
   if(active)active.className='active';
+  document.getElementById('speedLabel').textContent = timeScale + '×';
 }
 
 Object.entries(SPEEDS).forEach(([k,id])=>{document.getElementById(id).onclick=()=>setSpeed(Number(k))});
-
 document.getElementById('btnPlay').onclick=()=>{paused=!paused;document.getElementById('btnPlay').textContent=paused?'▶':'⏸'};
 
 const seekBar=document.getElementById('seekBar');
-seekBar.addEventListener('input',()=>{animTime=seekBar.value/1000*CYCLE_TOTAL});
+seekBar.addEventListener('input',()=>{animTime=seekBar.value/1000*CYCLE_TOTAL;updateMonitorDisplay()});
 seekBar.addEventListener('pointerdown',()=>{paused=true;document.getElementById('btnPlay').textContent='▶'});
 
 document.addEventListener('keydown',e=>{
@@ -694,8 +1100,48 @@ document.addEventListener('keydown',e=>{
   if(e.code==='Space'){e.preventDefault();paused=!paused;document.getElementById('btnPlay').textContent=paused?'▶':'⏸'}
 });
 
-// FPS tracking
 let fpsFrames=0,fpsTime=0,fpsVal=60;
+
+function updateCameraView(dt) {
+  if (viewMode === 'free') {
+    controls.enabled = true;
+    return;
+  }
+  controls.enabled = false;
+
+  let targetPos = new THREE.Vector3();
+  let lookTarget = new THREE.Vector3();
+
+  if (viewMode === 'track') {
+    const { ring, index } = selectedCabin;
+    const ringObj = ring === 'inner' ? innerRing : outerRing;
+    const pos = getCabinWorldPos(ringObj, index, ringObj.rotor.rotation.y);
+    lookTarget.set(pos.x, pos.y + 0.3, pos.z);
+
+    // View from outside the ring — camera placed radially outward from cabin
+    const rDist = Math.sqrt(pos.x*pos.x + pos.z*pos.z) || 1;
+    const outX = pos.x / rDist;
+    const outZ = pos.z / rDist;
+    const viewDist = 8;
+    const elevAngle = 0.55;
+    targetPos.set(
+      pos.x + viewDist * Math.cos(elevAngle) * outX,
+      pos.y + viewDist * Math.sin(elevAngle) + 0.3,
+      pos.z + viewDist * Math.cos(elevAngle) * outZ
+    );
+  } else if (viewMode === 'top') {
+    lookTarget.set(0, 25, 0);
+    targetPos.set(0, 65, 0.1);
+  } else if (viewMode === 'front') {
+    lookTarget.set(0, 25, 0);
+    targetPos.set(0, 25, 55);
+  }
+
+  const alpha = Math.min(dt * 3, 1);
+  camera.position.lerp(targetPos, alpha);
+  controls.target.lerp(lookTarget, alpha);
+  camera.lookAt(controls.target);
+}
 
 function animate(ts){
   requestAnimationFrame(animate);
@@ -704,13 +1150,10 @@ function animate(ts){
   let dt=now-animate.lastTs;
   animate.lastTs=now;
 
-  // FPS
   fpsFrames++; if(now-fpsTime>=1){fpsVal=Math.round(fpsFrames/(now-fpsTime));fpsFrames=0;fpsTime=now}
-
-  // Clamp dt for stability
   if(dt<=0||dt>.2)dt=.016;
 
-  if(!paused){
+  if(!paused && !eStop){
     animTime+=dt*timeScale;
     seekBar.value=Math.round((animTime%CYCLE_TOTAL)/CYCLE_TOTAL*1000);
   }
@@ -719,18 +1162,19 @@ function animate(ts){
   const {zR,zB,wR,wB,sR,sB}=getRingState(animTime);
   const pi=getPhaseInfo(animTime);
 
-  // Smooth position interpolation
   const alpha=Math.min(dt*timeScale*8,1);
   prevSmoothedZR+=(zR-prevSmoothedZR)*alpha;
   prevSmoothedZB+=(zB-prevSmoothedZB)*alpha;
 
-  innerRing.sleeve.position.y=prevSmoothedZR;
-  outerRing.sleeve.position.y=prevSmoothedZB;
-  if(!paused){innerRing.rotor.rotation.y+=wR*dt*timeScale;outerRing.rotor.rotation.y-=wB*dt*timeScale}
+  if (!eStop) {
+    innerRing.sleeve.position.y=prevSmoothedZR;
+    outerRing.sleeve.position.y=prevSmoothedZB;
+    if(!paused){innerRing.rotor.rotation.y+=wR*dt*timeScale;outerRing.rotor.rotation.y-=wB*dt*timeScale}
+  }
 
   // HUD
   const pct=Math.round(pi.elapsed/pi.dur*100);
-  document.getElementById('phaseText').innerHTML=`<span style="color:${pi.color};font-weight:bold;font-size:14px">● ${pi.label}</span> <span style="color:#8b949e;font-size:10px">(${pct}% | ${Math.floor(pi.elapsed)}s/${pi.dur}s)</span>`;
+  document.getElementById('phaseText').innerHTML=`<span style="color:${pi.color};font-weight:bold;font-size:14px">● ${pi.label}</span> <span style="color:#8b949e;font-size:10px">${eStop?'⚠ 急停中 ':''}(${pct}% | ${Math.floor(pi.elapsed)}s/${pi.dur}s)</span>`;
   let barHTML='';PHASES.forEach(p=>{const w=Math.round(p.dur/CYCLE_TOTAL*100);barHTML+=`<span style="display:inline-block;width:${w}%;background:${p.name===pi.name?pi.color:'#30363d'};height:4px;border-radius:2px"></span>`});
   document.getElementById('progressBar').innerHTML=barHTML;
   document.getElementById('zRed').textContent=Math.round(zR)+'m';
@@ -745,8 +1189,10 @@ function animate(ts){
   document.getElementById('tTotal').textContent=tm+':'+String(ts_).padStart(2,'0');
 
   updateCables(animTime);
+  updateMonitorDisplay();
+  updateCameraView(dt);
 
-  // Update PiP cameras — track capsule[0] on each ring
+  // PiP cameras
   const iPos = getCabinWorldPos(innerRing, 0, innerRing.rotor.rotation.y);
   const oPos = getCabinWorldPos(outerRing, 0, outerRing.rotor.rotation.y);
 
@@ -760,15 +1206,13 @@ function animate(ts){
   [{cam: pipCamI, pos: iPos, eye: eyeI},
    {cam: pipCamO, pos: oPos, eye: eyeO}]
   .forEach(({cam, pos, eye}) => {
-    // Camera orbits behind capsule (face direction + eye offsets)
-    const behindAz = pos.face + Math.PI + eye.az; // behind = face + 180° + eye pan
+    const behindAz = pos.face + Math.PI + eye.az;
     const d = 5;
     cam.position.set(
       pos.x + d * Math.cos(eye.el) * Math.sin(behindAz),
       pos.y + d * Math.sin(eye.el) + 1.5,
       pos.z + d * Math.cos(eye.el) * Math.cos(behindAz)
     );
-    // Look at a point slightly ahead of cabin
     cam.lookAt(
       pos.x + 1.5 * Math.cos(pos.face),
       pos.y,
@@ -795,9 +1239,21 @@ function animate(ts){
     if (el) { el.style.left = x + 'px'; el.style.bottom = bottom + 'px'; }
   });
   renderer.setScissorTest(false);
+
+  // Cabin interior monitor view
+  updateCabinMonitorCamera();
+  cabinRenderer.render(scene, cabinMonitorCam);
+  const cabinCtx = cabinViewCanvas.getContext('2d');
+  cabinCtx.drawImage(cabinRenderer.domElement, 0, 0);
 }
 animate.lastTs=0;
 
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+buildCabinButtons();
+buildVisibilityToggles();
+updateMonitorDisplay();
 requestAnimationFrame(animate);
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 </script>
